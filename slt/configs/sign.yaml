@@ -1,20 +1,20 @@
 name: sign_experiment
 data:
-    data_path: /home/botlhale/Documents/Mokgadi_masters/nslt-SASL
+    data_path: /home/minneke/Documents/Projects/SignExperiments/data/
     version: phoenix_2014_trans
     sgn: sign
     txt: text
     gls: gloss
-    train: SASL_list_train.pt
-    dev: SASL_list_dev.pt
-    test: SASL_list_dev.pt
+    train: ASL_train.pt
+    dev: ASL_dev.pt
+    test: ASL_test.pt
     feature_size: 1024
     level: word
     txt_lowercase: true
     max_sent_length: 400
     random_train_subset: -1
     random_dev_subset: -1
-    include_masks: true
+    include_masks: false
 testing:
     recognition_beam_sizes:
     - 1
@@ -50,7 +50,7 @@ training:
     reset_best_ckpt: false
     reset_scheduler: false
     reset_optimizer: false
-    random_seed: 42
+    random_seed: 30
     model_dir: "./sign_sample_model"
     # load_model: /home/botlhale/Documents/Mokgadi_masters/checkpoints/Sign2Gloss/sign_sample_model/16500.ckpt
     recognition_loss_weight: 0.0
@@ -59,7 +59,7 @@ training:
     # eval_metric: wer
     optimizer: adam
     learning_rate: 0.0001
-    batch_size: 2
+    batch_size: 128
     num_valid_log: 3
     epochs: 5000000
     early_stopping_metric: eval_metric

@@ -6,6 +6,7 @@ torch.backends.cudnn.deterministic = True
 import logging
 import numpy as np
 import pickle as pickle
+# Measures runtime
 import time
 import torch.nn as nn
 
@@ -30,6 +31,13 @@ from signjoey.phoenix_utils.phoenix_cleanup import (
 
 
 # pylint: disable=too-many-arguments,too-many-locals,no-member
+# validate model
+
+# Loads the dataset and processes it into batches.
+# Computes loss for recognition (CTC) and translation (cross-entropy).
+# Uses beam search or greedy decoding to generate predictions.
+# Computes performance metrics (BLEU, WER, CHRF, ROUGE).
+# Returns all evaluation results.
 def validate_on_data(
     model: SignModel,
     data: Dataset,
@@ -102,11 +110,16 @@ def validate_on_data(
         - decoded_valid: raw validation hypotheses (before post-processing),
         - valid_attention_scores: attention scores for validation hypotheses
     """
+    # call
+    # defined in data.py
+    # load the dataset in batches
     valid_iter = make_data_iter(
         dataset=data,
         batch_size=batch_size,
         batch_type=batch_type,
+        # same order necessary for validation
         shuffle=False,
+        # disables training-specific features
         train=False,
     )
 
@@ -123,6 +136,8 @@ def validate_on_data(
         total_num_gls_tokens = 0
         total_num_seqs = 0
         for valid_batch in iter(valid_iter):
+            # call
+            # Converts torchtext batch into a custom Batch object in batch.py
             batch = Batch(
                 is_train=False,
                 torch_batch=valid_batch,
@@ -132,17 +147,25 @@ def validate_on_data(
                 frame_subsampling_ratio=frame_subsampling_ratio,
                 include_masks=data.include_masks,
             )
+            # call
+            # Sorts by sign sequence length to improve computational efficiency defined in batch.py
             sort_reverse_index = batch.sort_by_sgn_lengths()
 
+            # call
+            # defined in model.py
+            # computes recognition and translation loss
             batch_recognition_loss, batch_translation_loss = model.get_loss_for_batch(
                 batch=batch,
                 recognition_loss_function=recognition_loss_function
+                # computes CTC loss
                 if do_recognition
                 else None,
                 translation_loss_function=translation_loss_function
+                # computes cross-entropy loss
                 if do_translation
                 else None,
                 recognition_loss_weight=recognition_loss_weight
+                # doesn't seem to be doing anything
                 if do_recognition
                 else None,
                 translation_loss_weight=translation_loss_weight
@@ -157,6 +180,11 @@ def validate_on_data(
                 total_num_txt_tokens += batch.num_txt_tokens
             total_num_seqs += batch.num_seqs
 
+            # call
+            # defined in model.py
+            # Generates gloss sequences
+            # Generates translated text
+            # runs inference using beam search or greedy decoding
             (
                 batch_gls_predictions,
                 batch_txt_predictions,
@@ -197,6 +225,9 @@ def validate_on_data(
             else:
                 valid_recognition_loss = -1
             # decode back to symbols
+            # call?
+            # think this is defined in vocabulary?
+            # Converts gloss token sequences into human-readable text
             decoded_gls = model.gls_vocab.arrays_to_sentences(arrays=all_gls_outputs)
 
             # Gloss clean-up function
@@ -230,6 +261,8 @@ def validate_on_data(
                 valid_translation_loss = -1
                 valid_ppl = -1
             # decode back to symbols
+            # call?
+            # think this is defined in vocabulary?
             decoded_txt = model.txt_vocab.arrays_to_sentences(arrays=all_txt_outputs)
             # evaluate with metric on full dataset
             join_char = " " if level in ["word", "bpe"] else ""
@@ -243,6 +276,8 @@ def validate_on_data(
             assert len(txt_ref) == len(txt_hyp)
 
             # TXT Metrics
+            # call
+            # defined in metrics.py
             txt_bleu = bleu(references=txt_ref, hypotheses=txt_hyp)
             txt_chrf = chrf(references=txt_ref, hypotheses=txt_hyp)
             txt_rouge = rouge(references=txt_ref, hypotheses=txt_hyp)
@@ -257,6 +292,8 @@ def validate_on_data(
             valid_scores["chrf"] = txt_chrf
             valid_scores["rouge"] = txt_rouge
 
+    # Returns all computed metrics for evaluation
+    # stored in dictionary
     results = {
         "valid_scores": valid_scores,
         "all_attention_scores": all_attention_scores,
@@ -278,6 +315,7 @@ def validate_on_data(
 
 
 # pylint: disable-msg=logging-too-many-args
+# loads a trained model and evaluates it on unseen data
 def test(
     cfg_file, ckpt: str, output_path: str = None, logger: logging.Logger = None
 ) -> None:
@@ -291,6 +329,8 @@ def test(
     :param logger: log output to this logger (creates new logger if not set)
     """
 
+    # creates logger if none is provided
+    # Formats log messages with timestamps
     if logger is None:
         logger = logging.getLogger(__name__)
         if not logger.handlers:
@@ -298,6 +338,9 @@ def test(
             logging.basicConfig(format=FORMAT)
             logger.setLevel(level=logging.DEBUG)
 
+    # Reads configurations
+    # call
+    # defined in helpers.py
     cfg = load_config(cfg_file)
 
     if "test" not in cfg["data"].keys():
@@ -322,14 +365,21 @@ def test(
     )
 
     # load the data
+    # call
+    # defined in data.py
     _, dev_data, test_data, gls_vocab, txt_vocab = load_data(data_cfg=cfg["data"])
 
     # load model state from disk
+    # call
+    # defined in helpers.py
     model_checkpoint = load_checkpoint(ckpt, use_cuda=use_cuda)
 
     # build model and load parameters into it
     do_recognition = cfg["training"].get("recognition_loss_weight", 1.0) > 0.0
     do_translation = cfg["training"].get("translation_loss_weight", 1.0) > 0.0
+    # call
+    # defined in model.py
+    # reconstructs model from checkpoint
     model = build_model(
         cfg=cfg["model"],
         gls_vocab=gls_vocab,
@@ -351,10 +401,12 @@ def test(
     #   'random_frame_masking_ratio' in testing as they are just for training.
 
     # whether to use beam search for decoding, 0: greedy decoding
+    # beam search sizes for recognition & translation
     if "testing" in cfg.keys():
         recognition_beam_sizes = cfg["testing"].get("recognition_beam_sizes", [1])
         translation_beam_sizes = cfg["testing"].get("translation_beam_sizes", [1])
         translation_beam_alphas = cfg["testing"].get("translation_beam_alphas", [-1])
+    # Defaults to greedy decoding if no beam sizes are provided
     else:
         recognition_beam_sizes = [1]
         translation_beam_sizes = [1]
@@ -367,6 +419,7 @@ def test(
         if max_recognition_beam_size is not None:
             recognition_beam_sizes = list(range(1, max_recognition_beam_size + 1))
 
+    # computes losses
     if do_recognition:
         recognition_loss_function = torch.nn.CTCLoss(
             blank=model.gls_vocab.stoi[SIL_TOKEN], zero_infinity=True
@@ -388,10 +441,13 @@ def test(
         dev_recognition_results = {}
         dev_best_wer_score = float("inf")
         dev_best_recognition_beam_size = 1
+        # Loops through beam sizes.
         for rbw in recognition_beam_sizes:
             logger.info("-" * 60)
             valid_start_time = time.time()
             logger.info("[DEV] partition [RECOGNITION] experiment [BW]: %d", rbw)
+            # call
+            # runs validation for each beam width
             dev_recognition_results[rbw] = validate_on_data(
                 model=model,
                 data=dev_data,
@@ -423,6 +479,7 @@ def test(
                 frame_subsampling_ratio=frame_subsampling_ratio,
             )
             logger.info("finished in %.4fs ", time.time() - valid_start_time)
+            # stores wer and keeps track of best beam size
             if dev_recognition_results[rbw]["valid_scores"]["wer"] < dev_best_wer_score:
                 dev_best_wer_score = dev_recognition_results[rbw]["valid_scores"]["wer"]
                 dev_best_recognition_beam_size = rbw
@@ -455,6 +512,8 @@ def test(
         for tbw in translation_beam_sizes:
             dev_translation_results[tbw] = {}
             for ta in translation_beam_alphas:
+                # evaluate on test set
+                # Uses the best beam sizes found from the validation set
                 dev_translation_results[tbw][ta] = validate_on_data(
                     model=model,
                     data=dev_data,
@@ -558,6 +617,7 @@ def test(
     )
     logger.info("*" * 60)
 
+    # runs final eval
     test_best_result = validate_on_data(
         model=model,
         data=test_data,
@@ -628,6 +688,7 @@ def test(
     )
     logger.info("*" * 60)
 
+    # Saves test results to a .pkl file
     def _write_to_file(file_path: str, sequence_ids: List[str], hypotheses: List[str]):
         with open(file_path, mode="w", encoding="utf-8") as out_file:
             for seq, hyp in zip(sequence_ids, hypotheses):

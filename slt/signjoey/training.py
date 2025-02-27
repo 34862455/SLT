@@ -35,8 +35,17 @@ from torch.utils.tensorboard import SummaryWriter
 from torchtext.legacy.data import Dataset
 from typing import List, Dict
 
+# Training pipline:
+    # Loading configurations
+    # Initializing the model
+    # Handling optimization and loss functions
+    # Training and validation loops
+    # Checkpointing and early stopping
+    # Final evaluation on val data
+
 
 # pylint: disable=too-many-instance-attributes
+# Manages the training cycle.
 class TrainManager:
     """ Manages training loop, validations, learning rate scheduling
     and early stopping."""
@@ -108,7 +117,7 @@ class TrainManager:
             "early_stopping_metric", "eval_metric"
         )
 
-        # if we schedule after BLEU/chrf, we want to maximize it, else minimize
+        # if we schedule after BLEU/chrf/rouge, we want to maximize it, else minimize
         # early_stopping_metric decides on how to find the early stopping point:
         # ckpts are written when there's a new high/low score for this metric
         if self.early_stopping_metric in [
@@ -239,6 +248,7 @@ class TrainManager:
             "translation_max_output_length", None
         )
 
+    # Saves model parameters, optimizer state, and training stats of best model
     def _save_checkpoint(self) -> None:
         """
         Save the model's current parameters and the training state to a
@@ -282,6 +292,7 @@ class TrainManager:
             "{}.ckpt".format(self.steps), "{}/best.ckpt".format(self.model_dir)
         )
 
+    # Restores model, optimizer, and scheduler from a saved checkpoint.
     def init_from_checkpoint(
         self,
         path: str,
@@ -339,6 +350,7 @@ class TrainManager:
         if self.use_cuda:
             self.model.cuda()
 
+    # Main training loop
     def train_and_validate(self, train_data: Dataset, valid_data: Dataset) -> None:
         """
         Train the model and validate it from time to time on the validation set.
@@ -346,6 +358,7 @@ class TrainManager:
         :param train_data: training data
         :param valid_data: validation data
         """
+        # Creates training batch iterator
         train_iter = make_data_iter(
             train_data,
             batch_size=self.batch_size,
@@ -354,6 +367,7 @@ class TrainManager:
             shuffle=self.shuffle,
         )
         epoch_no = None
+        # Epoch loop
         for epoch_no in range(self.epochs):
             self.logger.info("EPOCH %d", epoch_no + 1)
 
@@ -372,6 +386,7 @@ class TrainManager:
                 processed_txt_tokens = self.total_txt_tokens
                 epoch_translation_loss = 0
 
+            # batch loop
             for batch in iter(train_iter):
                 # reactivate training
                 # create a Batch object from torchtext batch
@@ -559,6 +574,7 @@ class TrainManager:
                     else:
                         ckpt_score = val_res["valid_scores"][self.eval_metric]
 
+                    # Saves the best checkpoint based on validation scores.
                     new_best = False
                     if self.is_best(ckpt_score):
                         self.best_ckpt_score = ckpt_score
@@ -786,7 +802,7 @@ class TrainManager:
         total_loss.backward()
 
         if self.clip_grad_fun is not None:
-            # clip gradients (in-place)
+            # clip gradients (in-place) to avoid exploding gradients
             self.clip_grad_fun(params=self.model.parameters())
 
         if update:
@@ -967,18 +983,22 @@ class TrainManager:
             for seq, hyp in zip(sequence_ids, hypotheses):
                 opened_file.write("{}|{}\n".format(seq, hyp))
 
-
+# Loads the configuration, prepares data, initializes the model, and launches training.
 def train(cfg_file: str) -> None:
     """
     Main training function. After training, also test on test data if given.
 
     :param cfg_file: path to configuration yaml file
     """
+    # Step 1: Load configurations from a YAML file
     cfg = load_config(cfg_file)
 
-    # set the random seed
-    set_seed(seed=cfg["training"].get("random_seed", 42))
+    # Step 2: Load training, validation, and test data
 
+    # set the random seed
+    set_seed(seed=cfg["training"].get("random_seed", 30))
+
+    # load data
     train_data, dev_data, test_data, gls_vocab, txt_vocab = load_data(
         data_cfg=cfg["data"]
     )
@@ -1000,6 +1020,7 @@ def train(cfg_file: str) -> None:
     # for training management, e.g. early stopping and model selection
     trainer = TrainManager(model=model, config=cfg)
 
+    # Logs data & model parameters.
     # store copy of original training config in model dir
     shutil.copy2(cfg_file, trainer.model_dir + "/config.yaml")
 
@@ -1023,7 +1044,7 @@ def train(cfg_file: str) -> None:
     txt_vocab_file = "{}/txt.vocab".format(cfg["training"]["model_dir"])
     txt_vocab.to_file(txt_vocab_file)
 
-    # train the model
+    # train the model - actual training
     trainer.train_and_validate(train_data=train_data, valid_data=dev_data)
     # Delete to speed things up as we don't need training data anymore
     del train_data, dev_data, test_data
@@ -1037,7 +1058,7 @@ def train(cfg_file: str) -> None:
     del trainer
     test(cfg_file, ckpt=ckpt, output_path=output_path, logger=logger)
 
-
+# Parses command-line arguments and starts training.
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Joey-NMT")
     parser.add_argument(
@@ -1051,4 +1072,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
+    # calls trainer
     train(cfg_file=args.config)

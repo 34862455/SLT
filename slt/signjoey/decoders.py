@@ -15,6 +15,7 @@ from signjoey.transformer_layers import PositionalEncoding, TransformerDecoderLa
 from transformers import BertConfig, BertModel, GPT2Model, GPT2Config
 import numpy as np
 # pylint: disable=abstract-method
+# base class for all decoder
 class Decoder(nn.Module):
     """
     Base decoder class
@@ -27,11 +28,13 @@ class Decoder(nn.Module):
 
         :return:
         """
+        # returns the size of the target vocabulary
         return self._output_size
 
 
 # pylint: disable=arguments-differ,too-many-arguments
 # pylint: disable=too-many-instance-attributes, unused-argument
+# decoding LSTM or GRU
 class RecurrentDecoder(Decoder):
     """A conditional RNN decoder with attention."""
 
@@ -94,8 +97,9 @@ class RecurrentDecoder(Decoder):
             self.rnn_input_size = emb_size
 
         # the decoder RNN
+        # processes inputs sequentially and maintains a hidden state
         self.rnn = rnn(
-            self.rnn_input_size,
+            self.rnn_input_size, #includes word embeddings + attention vector
             hidden_size,
             num_layers,
             batch_first=True,
@@ -110,12 +114,14 @@ class RecurrentDecoder(Decoder):
         self.output_layer = nn.Linear(hidden_size, vocab_size, bias=False)
         self._output_size = vocab_size
 
+        # Uses a separate feed-forward network for scoring
         if attention == "bahdanau":
             self.attention = BahdanauAttention(
                 hidden_size=hidden_size,
                 key_size=encoder.output_size,
                 query_size=hidden_size,
             )
+        # Uses the dot product for scoring
         elif attention == "luong":
             self.attention = LuongAttention(
                 hidden_size=hidden_size, key_size=encoder.output_size
@@ -131,8 +137,10 @@ class RecurrentDecoder(Decoder):
 
         # to initialize from the final encoder state of last layer
         self.init_hidden_option = init_hidden
+        # Projects encoder hidden state to decoder dimensions
         if self.init_hidden_option == "bridge":
             self.bridge_layer = nn.Linear(encoder.output_size, hidden_size, bias=True)
+        # Uses encoder's last hidden state directly
         elif self.init_hidden_option == "last":
             if encoder.output_size != self.hidden_size:
                 if encoder.output_size != 2 * self.hidden_size:  # bidirectional
@@ -216,6 +224,7 @@ class RecurrentDecoder(Decoder):
             assert prev_att_vector.shape[2] == self.hidden_size
             assert prev_att_vector.shape[1] == 1
 
+    # Takes embedded target words and generates output tokens
     def _forward_step(
         self,
         prev_embed: Tensor,
@@ -383,6 +392,7 @@ class RecurrentDecoder(Decoder):
                 )
 
         # unroll the decoder RNN for `unroll_steps` steps
+        # one step per token
         for i in range(unroll_steps):
             prev_embed = trg_embed[:, i].unsqueeze(1)  # batch, 1, emb
             prev_att_vector, hidden, att_prob = self._forward_step(
@@ -546,6 +556,7 @@ class TransformerDecoder(Decoder):
         x = self.pe(trg_embed)  # add position encoding to word embedding
         x = self.emb_dropout(x)
 
+        # prevents attention to future tokens
         trg_mask = trg_mask & subsequent_mask(trg_embed.size(1)).type_as(trg_mask)
         
 
@@ -599,6 +610,7 @@ class BERTDecoder(Decoder):
         self.config = BertConfig.from_pretrained(pretrained_name)
         self.config.is_decoder = True
         self.config.add_cross_attention = True
+        # pretrained BERT model
         if pretrain:
             print('Using pretrained model')
             self.bert_model = BertModel.from_pretrained(pretrained_name, config=self.config)
@@ -610,12 +622,14 @@ class BERTDecoder(Decoder):
         # Make sure our configuration file is compatible with the pretrained model
         assert self.decoder.config.hidden_size == hidden_size
 
+        # removing BERT layers to adjust model size
         # Only keep given number of layers
         orig_nr_layers = len(self.decoder.layer)
         for i in range(orig_nr_layers - 1, num_layers - 1, -1):
             self.decoder.layer[i] = BERTIdentity()
         self.num_layers = num_layers
 
+        # Can freeze certain layers for fine-tuning
         if pretrain:
             # Freeze if needed. We only freeze the attention and intermediate layers, but keep the
             #  linear transformations in the "BertOutput" layer.
@@ -697,6 +711,7 @@ class BERTDecoder(Decoder):
         trg_mask = trg_mask.squeeze(dim=1)
         trg_mask = self.bert_model.get_extended_attention_mask(trg_mask, trg_mask.shape, trg_mask.device)
 
+        # Uses cross-attention between target and encoder output
         x = self.decoder(x, attention_mask=trg_mask, encoder_hidden_states=encoder_output,
                          encoder_attention_mask=src_mask)
 
@@ -713,6 +728,7 @@ class BERTDecoder(Decoder):
             self.decoder.config.num_attention_heads,
         )
 
+# No encoder-decoder structure (fully auto-regressive)
 class GPT2Decoder(Decoder):
     """
     Transformer Encoder

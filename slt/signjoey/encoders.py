@@ -10,6 +10,8 @@ from signjoey.transformer_layers import TransformerEncoderLayer, PositionalEncod
 
 
 # pylint: disable=abstract-method
+# base class for all encoders
+# overrided by RecurrentEncoder, TransformerEncoder
 class Encoder(nn.Module):
     """
     Base encoder class
@@ -22,9 +24,12 @@ class Encoder(nn.Module):
 
         :return:
         """
+        # returns the size of the encoded representation
         return self._output_size
 
 
+# encodes an input sequence using either GRU or LSTM
+# used in model.py (build_model())
 class RecurrentEncoder(Encoder):
     """Encodes a sequence of word embeddings"""
 
@@ -57,10 +62,12 @@ class RecurrentEncoder(Encoder):
 
         super(RecurrentEncoder, self).__init__()
 
+        # Applies dropout to input embeddings before feeding into the RNN
         self.emb_dropout = torch.nn.Dropout(p=emb_dropout, inplace=False)
         self.type = rnn_type
         self.emb_size = emb_size
 
+        # Chooses GRU or LSTM
         rnn = nn.GRU if rnn_type == "gru" else nn.LSTM
 
         self.rnn = rnn(
@@ -69,15 +76,20 @@ class RecurrentEncoder(Encoder):
             num_layers,
             batch_first=True,
             bidirectional=bidirectional,
+            # applies dropout between layers
             dropout=dropout if num_layers > 1 else 0.0,
         )
 
+        # hidden size is doubled if bidirectional
+        # Stores the final output size
         self._output_size = 2 * hidden_size if bidirectional else hidden_size
 
         if freeze:
             freeze_params(self)
 
     # pylint: disable=invalid-name, unused-argument
+    # debugging utility
+    # used in forward()
     def _check_shapes_input_forward(
         self, embed_src: Tensor, src_length: Tensor, mask: Tensor
     ) -> None:
@@ -89,10 +101,11 @@ class RecurrentEncoder(Encoder):
         :param src_length: source length
         :param mask: source mask
         """
-        assert embed_src.shape[0] == src_length.shape[0]
-        assert embed_src.shape[2] == self.emb_size
+        # raises an error if any input tensor does not match expected dimensions
+        assert embed_src.shape[0] == src_length.shape[0] #ensure batch size is the same
+        assert embed_src.shape[2] == self.emb_size #ensures embedding dimension are equal
         # assert mask.shape == embed_src.shape
-        assert len(src_length.shape) == 1
+        assert len(src_length.shape) == 1 # ensures 1D tensor
 
     # pylint: disable=arguments-differ
     def forward(
@@ -122,13 +135,18 @@ class RecurrentEncoder(Encoder):
         # apply dropout to the rnn input
         embed_src = self.emb_dropout(embed_src)
 
+        # call
+        # ignore padding for efficient computation
         packed = pack_padded_sequence(embed_src, src_length, batch_first=True)
         output, hidden = self.rnn(packed)
 
         # pylint: disable=unused-variable
+        # If using an LSTM, separates the hidden state and memory cell
         if isinstance(hidden, tuple):
             hidden, memory_cell = hidden
 
+        # call
+        # Converts packed output back into a normal tensor
         output, _ = pad_packed_sequence(output, batch_first=True)
         # hidden: dir*layers x batch x hidden
         # output: batch x max_length x directions*hidden
@@ -156,7 +174,7 @@ class RecurrentEncoder(Encoder):
     def __repr__(self):
         return "%s(%r)" % (self.__class__.__name__, self.rnn)
 
-
+# Used in model.py (build_model())
 class TransformerEncoder(Encoder):
     """
     Transformer Encoder
@@ -189,6 +207,7 @@ class TransformerEncoder(Encoder):
         super(TransformerEncoder, self).__init__()
 
         # build all (num_layers) layers
+        # reates a stack of Transformer layers
         self.layers = nn.ModuleList(
             [
                 TransformerEncoderLayer(
@@ -201,7 +220,7 @@ class TransformerEncoder(Encoder):
             ]
         )
 
-        self.layer_norm = nn.LayerNorm(hidden_size, eps=1e-6)
+        self.layer_norm = nn.LayerNorm(hidden_size, eps=1e-6) # normalize
         self.pe = PositionalEncoding(hidden_size)
         self.emb_dropout = nn.Dropout(p=emb_dropout)
 
@@ -235,6 +254,7 @@ class TransformerEncoder(Encoder):
         x = self.pe(embed_src)  # add position encoding to word embeddings
         x = self.emb_dropout(x)
 
+        # Passes through multiple Transformer encoder layers
         for layer in self.layers:
             x = layer(x, mask)
         return self.layer_norm(x), None

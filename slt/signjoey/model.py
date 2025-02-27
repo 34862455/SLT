@@ -30,8 +30,9 @@ from signjoey.helpers import freeze_params
 from torch import Tensor
 from typing import Union
 
-
+# encapsulates full model
 class SignModel(nn.Module):
+    # For both SLT and SLR
     """
     Base Model class
     """
@@ -41,7 +42,9 @@ class SignModel(nn.Module):
         encoder: Encoder,
         gloss_output_layer: nn.Module,
         decoder: Decoder,
+        # Spacial embeddings for SL features
         sgn_embed: SpatialEmbeddings,
+        # Word embeddings for text
         txt_embed: Embeddings,
         gls_vocab: GlossVocabulary,
         txt_vocab: TextVocabulary,
@@ -61,6 +64,7 @@ class SignModel(nn.Module):
         :param do_translation: flag to build the model with translation decoder.
         """
         super().__init__()
+        # I'm guessing this was feature extraction before it was moved to pretraining?
 
         # s3d = S3D(2000)
         # s3d.load_state_dict(torch.load('/home/botlhale/Documents/Mokgadi_masters/S3D/checkpoints/nslt_2000_066704_0.408206.pt'))
@@ -117,10 +121,12 @@ class SignModel(nn.Module):
         self.txt_eos_index = self.txt_vocab.stoi[EOS_TOKEN]
 
         self.gloss_output_layer = gloss_output_layer
+        # Flags
         self.do_recognition = do_recognition
         self.do_translation = do_translation
 
     # pylint: disable=arguments-differ
+    # Forward path
     def forward(
         self,
         sgn: Tensor,
@@ -140,6 +146,7 @@ class SignModel(nn.Module):
         :param txt_mask: target mask
         :return: decoder outputs
         """
+        # calls encode() to generate visual features
         encoder_output, encoder_hidden = self.encode(
             sgn=sgn, sgn_mask=sgn_mask, sgn_length=sgn_lengths
         )
@@ -147,6 +154,7 @@ class SignModel(nn.Module):
         if self.do_recognition:
             # Gloss Recognition Part
             # N x T x C
+            # glosses used as outputs
             gloss_scores = self.gloss_output_layer(encoder_output)
             # N x T x C
             gloss_probabilities = gloss_scores.log_softmax(2)
@@ -189,6 +197,11 @@ class SignModel(nn.Module):
         # print("The shape of the sign ",sgn.shape)
         # return sgn, None
         # return self.sgn_embed(x=sgn, mask=sgn_mask), None
+
+        # Embeds the sign language input.
+        # Feeds it into the encoder (either Transformer or RNN).
+        # Returns encoder outputs for later decoding.
+
         return self.encoder(
             embed_src=self.sgn_embed(x=sgn, mask=sgn_mask),
             src_length=sgn_length,
@@ -218,6 +231,11 @@ class SignModel(nn.Module):
         :param txt_mask: mask for spoken language words
         :return: decoder outputs (outputs, hidden, att_probs, att_vectors)
         """
+
+        # Uses an attention-based decoder (Transformer, RNN, BERT, GPT2).
+        # Computes next word probabilities for translation.
+        # Takes in previously generated words and encoder outputs.
+
         return self.decoder(
             encoder_output=encoder_output,
             encoder_hidden=encoder_hidden,
@@ -228,6 +246,7 @@ class SignModel(nn.Module):
             hidden=decoder_hidden,
         )
 
+    # Forward path on batch
     def get_loss_for_batch(
         self,
         batch: Batch,
@@ -248,6 +267,8 @@ class SignModel(nn.Module):
         :return: translation_loss: sum of losses over non-pad elements in the batch
         """
         # pylint: disable=unused-variable
+
+        # Calculates losses before combining them
 
         # Do a forward pass
         decoder_outputs, gloss_probabilities, encoder_output = self.forward(
@@ -289,6 +310,7 @@ class SignModel(nn.Module):
 
         return recognition_loss, translation_loss
 
+    # Prediction
     def run_batch(
         self,
         batch: Batch,
@@ -328,7 +350,7 @@ class SignModel(nn.Module):
                 (gloss_probabilities[:, :, 1:], gloss_probabilities[:, :, 0, None]),
                 axis=-1,
             )
-
+            # CTC beam search
             assert recognition_beam_size > 0
             ctc_decode, _ = tf.nn.ctc_beam_search_decoder(
                 inputs=tf_gloss_probabilities,
@@ -428,6 +450,7 @@ def build_model(
 
     txt_padding_idx = txt_vocab.stoi[PAD_TOKEN]
 
+    # Create sign embeddings
     sgn_embed: SpatialEmbeddings = SpatialEmbeddings(
         **cfg["encoder"]["embeddings"],
         num_heads=cfg["encoder"]["num_heads"],
@@ -442,19 +465,21 @@ def build_model(
             cfg["encoder"]["embeddings"]["embedding_dim"]
             == cfg["encoder"]["hidden_size"]
         ), "for transformer, emb_size must be hidden_size"
-
+        # Transformer encoder
         encoder = TransformerEncoder(
             **cfg["encoder"],
             emb_size=sgn_embed.embedding_dim,
             emb_dropout=enc_emb_dropout,
         )
     else:
+        # RNN encoder
         encoder = RecurrentEncoder(
             **cfg["encoder"],
             emb_size=sgn_embed.embedding_dim,
             emb_dropout=enc_emb_dropout,
         )
 
+    # Creates linear layer for gloss predictions
     if do_recognition:
         gloss_output_layer = nn.Linear(encoder.output_size, len(gls_vocab))
         if cfg["encoder"].get("freeze", False):
@@ -472,6 +497,7 @@ def build_model(
         )
         dec_dropout = cfg["decoder"].get("dropout", 0.0)
         dec_emb_dropout = cfg["decoder"]["embeddings"].get("dropout", dec_dropout)
+        # Transformer decoder
         if cfg["decoder"].get("type", "recurrent") == "transformer":
             decoder = TransformerDecoder(
                 **cfg["decoder"],
@@ -480,6 +506,7 @@ def build_model(
                 emb_size=txt_embed.embedding_dim,
                 emb_dropout=dec_emb_dropout,
             )
+        # BERT decoder
         elif cfg["decoder"].get("type", "recurrent") == "BERT":
             decoder = BERTDecoder(
                 **cfg["decoder"],
@@ -488,6 +515,7 @@ def build_model(
                 emb_size=txt_embed.embedding_dim,
                 emb_dropout=dec_emb_dropout,
             )
+        #GPT2 decoder
         elif cfg["decoder"].get("type", "recurrent") == "GPT2":
             decoder = GPT2Decoder(
                 **cfg["decoder"],
@@ -497,6 +525,7 @@ def build_model(
                 emb_dropout=dec_emb_dropout,
             )
         else:
+            # RNN decoder
             decoder = RecurrentDecoder(
                 **cfg["decoder"],
                 encoder=encoder,
@@ -508,6 +537,7 @@ def build_model(
         txt_embed = None
         decoder = None
 
+    # wrapping it up in a bow
     model: SignModel = SignModel(
         encoder=encoder,
         gloss_output_layer=gloss_output_layer,

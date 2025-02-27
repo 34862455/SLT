@@ -8,12 +8,13 @@ from torch import Tensor
 import torch.nn as nn
 import torch.nn.functional as F
 
-
+# base class for all attention mechanisms
 class AttentionMechanism(nn.Module):
     """
     Base attention class
     """
 
+    # must be implemented by subclasses
     def forward(self, *inputs):
         raise NotImplementedError("Implement this.")
 
@@ -36,9 +37,9 @@ class BahdanauAttention(AttentionMechanism):
 
         super(BahdanauAttention, self).__init__()
 
-        self.key_layer = nn.Linear(key_size, hidden_size, bias=False)
-        self.query_layer = nn.Linear(query_size, hidden_size, bias=False)
-        self.energy_layer = nn.Linear(hidden_size, 1, bias=False)
+        self.key_layer = nn.Linear(key_size, hidden_size, bias=False) #Projects encoder outputs (keys)
+        self.query_layer = nn.Linear(query_size, hidden_size, bias=False) #Projects decoder hidden states (queries)
+        self.energy_layer = nn.Linear(hidden_size, 1, bias=False) #Computes attention scores
 
         self.proj_keys = None  # to store projected keys
         self.proj_query = None  # projected query
@@ -57,6 +58,8 @@ class BahdanauAttention(AttentionMechanism):
         :return: context vector of shape (batch_size, 1, value_size),
             attention probabilities of shape (batch_size, 1, sgn_length)
         """
+        # Ensures that the query, mask, and values have valid shapes
+        # call
         self._check_input_shapes_forward(query=query, mask=mask, values=values)
 
         assert mask is not None, "mask is required"
@@ -69,6 +72,7 @@ class BahdanauAttention(AttentionMechanism):
         # Calculate scores.
         # proj_keys: batch x sgn_len x hidden_size
         # proj_query: batch x 1 x hidden_size
+        # Combines projected keys and queries using a non-linearity (tanh)
         scores = self.energy_layer(torch.tanh(self.proj_query + self.proj_keys))
         # scores: batch x sgn_len x 1
 
@@ -127,6 +131,8 @@ class BahdanauAttention(AttentionMechanism):
         return "BahdanauAttention"
 
 
+# Uses dot-product attention instead of an MLP
+# More computationally efficient than Bahdanau
 class LuongAttention(AttentionMechanism):
     """
     Implements Luong (bilinear / multiplicative) attention.
@@ -176,6 +182,7 @@ class LuongAttention(AttentionMechanism):
         assert mask is not None, "mask is required"
 
         # scores: batch_size x 1 x sgn_length
+        # Computes dot-product between query and projected keys
         scores = query @ self.proj_keys.transpose(1, 2)
 
         # mask out invalid positions by filling the masked out parts with -inf

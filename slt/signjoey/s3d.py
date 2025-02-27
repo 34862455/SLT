@@ -7,11 +7,16 @@ class S3D(nn.Module):
     def __init__(self, num_class):
         super(S3D, self).__init__()
         self.base = nn.Sequential(
+            # call
             SepConv3d(3, 64, kernel_size=7, stride=2, padding=3),
             nn.MaxPool3d(kernel_size=(1,3,3), stride=(1,2,2), padding=(0,1,1)),
+            # call
             BasicConv3d(64, 64, kernel_size=1, stride=1),
+            # separable convolutions
+            # call
             SepConv3d(64, 192, kernel_size=3, stride=1, padding=1),
             nn.MaxPool3d(kernel_size=(1,3,3), stride=(1,2,2), padding=(0,1,1)),
+            # Inception-like modules
             Mixed_3b(),
             Mixed_3c(),
             nn.MaxPool3d(kernel_size=(3,3,3), stride=(2,2,2), padding=(1,1,1)),
@@ -29,16 +34,21 @@ class S3D(nn.Module):
 
     def forward(self, x):
         y = self.base(x)
+        # global average pooling
         y = F.avg_pool3d(y, (1, y.size(3),y.size(4) ), stride=1)
+        # Transposes the last two dimensions to match downstream input format
         return y.squeeze(3).squeeze(3).transpose(2,1)
         # extractor = self.base[:-3]
         # y = extractor(x)
         # y = F.avg_pool3d(y, (1, y.size(3),y.size(4) ), stride=1)
         # return y.squeeze(3).squeeze(3).transpose(2,1)
-    
+
+    # Replaces the final classification layer
+    # Used in transfer learning
     def replace_logits(self, num_class):
         self.fc = nn.Sequential(nn.Conv3d(1024, num_class, kernel_size=1, stride=1, bias=True),)
 
+# Performs a standard 3D convolution
 class BasicConv3d(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride, padding=0):
         super(BasicConv3d, self).__init__()
@@ -52,13 +62,20 @@ class BasicConv3d(nn.Module):
         x = self.relu(x)
         return x
 
+# Performs a factorized 3D convolution
 class SepConv3d(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride, padding=0):
         super(SepConv3d, self).__init__()
+        # Breaks down kernels into 2 smaller convs
+        # spatial convolution
+        # Extracts frame-wise spatial feature
         self.conv_s = nn.Conv3d(in_planes, out_planes, kernel_size=(1,kernel_size,kernel_size), stride=(1,stride,stride), padding=(0,padding,padding), bias=False)
         self.bn_s = nn.BatchNorm3d(out_planes, eps=1e-3, momentum=0.001, affine=True)
         self.relu_s = nn.ReLU()
 
+        # temporal convolution
+        # Captures motion features over time
+        # Reduces computational cost
         self.conv_t = nn.Conv3d(out_planes, out_planes, kernel_size=(kernel_size,1,1), stride=(stride,1,1), padding=(padding,0,0), bias=False)
         self.bn_t = nn.BatchNorm3d(out_planes, eps=1e-3, momentum=0.001, affine=True)
         self.relu_t = nn.ReLU()
@@ -73,27 +90,34 @@ class SepConv3d(nn.Module):
         x = self.relu_t(x)
         return x
 
+# combining different convolutional paths
 class Mixed_3b(nn.Module):
     def __init__(self):
         super(Mixed_3b, self).__init__()
 
+        # bottleneck
         self.branch0 = nn.Sequential(
             BasicConv3d(192, 64, kernel_size=1, stride=1),
         )
         self.branch1 = nn.Sequential(
+            # normal cnn followed by seperable cnn
             BasicConv3d(192, 96, kernel_size=1, stride=1),
             SepConv3d(96, 128, kernel_size=3, stride=1, padding=1),
         )
         self.branch2 = nn.Sequential(
+            # normal cnn followed by seperable cnn
             BasicConv3d(192, 16, kernel_size=1, stride=1),
             SepConv3d(16, 32, kernel_size=3, stride=1, padding=1),
         )
         self.branch3 = nn.Sequential(
+            # pooling before normal cnn
             nn.MaxPool3d(kernel_size=(3,3,3), stride=1, padding=1),
             BasicConv3d(192, 32, kernel_size=1, stride=1),
         )
 
     def forward(self, x):
+        # Concatenates outputs from all four branches
+        # Enables multi-scale feature extraction
         x0 = self.branch0(x)
         x1 = self.branch1(x)
         x2 = self.branch2(x)

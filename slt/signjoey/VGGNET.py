@@ -12,6 +12,7 @@ Factor = 0.25
 class Vgg(nn.Module):
     def __init__(self, num_joints=14, n_classes=10):
         super(Vgg, self).__init__()
+        #  3x3 kernels
         self.conv1_1 = nn.Conv2d(3, int(64*Factor), kernel_size=3, padding=1)
         self.conv1_2 = nn.Conv2d(int(64*Factor), int(64*Factor), kernel_size=3, padding=1)
 
@@ -30,11 +31,15 @@ class Vgg(nn.Module):
         self.conv5_2 = nn.Conv2d(int(512*Factor), int(512*Factor), kernel_size=3, padding=1)
         self.conv5_3 = nn.Conv2d(int(512*Factor), int(512*Factor), kernel_size=3, padding=1)
 
+        # 2x2 pooling
         self.pool = nn.MaxPool2d(2, 2)
         self.fc6 = nn.Linear(6*6*int(512*Factor), n_classes)
 
+        # # generate heatmaps for pose estimation
+        # # upsamples feature maps back to spatial dimensions
         # self.Tranconv1 = nn.ConvTranspose2d(int(512*Factor), int(256*Factor), 3, stride=2)
         # self.Tranconv2 = nn.ConvTranspose2d(int(256*Factor), int(128*Factor), 3, stride=2, padding=1, output_padding=1)
+        # # outputs a heatmap for each joint in the frame
         # self.pointwise1 = nn.Conv2d(int(128*Factor), num_joints, 1)
 
         # self.Tranconv3 = nn.ConvTranspose2d(int(256 * Factor), int(128 * Factor), 3, stride=2, padding=1,
@@ -77,8 +82,13 @@ class Vgg(nn.Module):
 
     def forward(self, x):
         # x =[batch, video_length, w, h, c]
+        # Reshapes video input to [batch, channels, height, width]
         batch, video_length, w, h, channel = x.shape
         x = x.view(-1, w, h, channel).permute(0, 3, 1, 2).contiguous()
+
+        # 5 blocks with:
+        #   2-3 conv layers with ReLU activation
+        #   maxpooling
 
         # intput = [16,200,200,3] con2=[16,16,50,50]
         # conv3 =  [16, 32, 25, 25] conv4= [16, 64, 12, 12]
@@ -97,7 +107,9 @@ class Vgg(nn.Module):
 
         x = self.Conv5(x)
         x = x.view(-1, 6 * 6 * int(512*Factor))
+        # final feature representation
         x = self.fc6(x)
+        # Reshapes back to [batch, video_length, feature_size]
         x = x.view(batch, video_length, -1)
 
         # return x, heatmap

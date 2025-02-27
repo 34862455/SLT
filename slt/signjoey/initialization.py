@@ -11,18 +11,21 @@ import torch.nn as nn
 from torch import Tensor
 from torch.nn.init import _calculate_fan_in_and_fan_out
 
-
+# Applies orthogonal initialization to recurrent weight matrices inside an RNN
+# Used in initialize_model() for both encoders and decoders
 def orthogonal_rnn_init_(cell: nn.RNNBase, gain: float = 1.0):
     """
     Orthogonal initialization of recurrent weights
     RNN parameters contain 3 or 4 matrices in one parameter, so we slice it.
     """
     with torch.no_grad():
-        for _, hh, _, _ in cell.all_weights:
-            for i in range(0, hh.size(0), cell.hidden_size):
+        for _, hh, _, _ in cell.all_weights: #Loops through all weight matrices in the RNN
+            for i in range(0, hh.size(0), cell.hidden_size): #Splits the matrix into individual hidden state components
                 nn.init.orthogonal_(hh.data[i : i + cell.hidden_size], gain=gain)
 
 
+# Helps LSTMs retain long-term memory by preventing the forget gate from shutting down important information early in training
+#  Used in initialize_model() for both encoder and decoder LSTMs
 def lstm_forget_gate_init_(cell: nn.RNNBase, value: float = 1.0) -> None:
     """
     Initialize LSTM forget gates with `value`.
@@ -31,12 +34,13 @@ def lstm_forget_gate_init_(cell: nn.RNNBase, value: float = 1.0) -> None:
     :param value: initial value, default: 1
     """
     with torch.no_grad():
-        for _, _, ih_b, hh_b in cell.all_weights:
+        for _, _, ih_b, hh_b in cell.all_weights: #biases are split into 4 equal parts
             l = len(ih_b)
-            ih_b.data[l // 4 : l // 2].fill_(value)
+            ih_b.data[l // 4 : l // 2].fill_(value) #forget gate set to 1
             hh_b.data[l // 4 : l // 2].fill_(value)
 
 
+# Xavier initialization for LSTM & GRU weights
 def xavier_uniform_n_(w: Tensor, gain: float = 1.0, n: int = 4) -> None:
     """
     Xavier initializer for parameters that combine multiple matrices in one
@@ -48,12 +52,12 @@ def xavier_uniform_n_(w: Tensor, gain: float = 1.0, n: int = 4) -> None:
     :param n: default 4
     """
     with torch.no_grad():
-        fan_in, fan_out = _calculate_fan_in_and_fan_out(w)
+        fan_in, fan_out = _calculate_fan_in_and_fan_out(w) #Extracts neurons
         assert fan_out % n == 0, "fan_out should be divisible by n"
-        fan_out //= n
+        fan_out //= n #devide by 4 for lstm and 3 for gru
         std = gain * math.sqrt(2.0 / (fan_in + fan_out))
-        a = math.sqrt(3.0) * std
-        nn.init.uniform_(w, -a, a)
+        a = math.sqrt(3.0) * std #xavier scaling factor
+        nn.init.uniform_(w, -a, a) #uniform initialization
 
 
 # pylint: disable=too-many-branches
@@ -94,6 +98,7 @@ def initialize_model(model: nn.Module, cfg: dict, txt_padding_idx: int) -> None:
     :param txt_padding_idx: index of spoken language text padding token
     """
 
+    # Reads user-defined initialization types from the configuration file
     # defaults: xavier, embeddings: normal 0.01, biases: zeros, no orthogonal
     gain = float(cfg.get("init_gain", 1.0))  # for xavier
     init = cfg.get("initializer", "xavier")
@@ -107,6 +112,7 @@ def initialize_model(model: nn.Module, cfg: dict, txt_padding_idx: int) -> None:
     bias_init_weight = float(cfg.get("bias_init_weight", 0.01))
 
     # pylint: disable=unnecessary-lambda, no-else-return
+    # Dynamically assigns the correct initializer based on the config
     def _parse_init(s, scale, _gain):
         scale = float(scale)
         assert scale > 0.0, "incorrect init_weight"
@@ -126,16 +132,19 @@ def initialize_model(model: nn.Module, cfg: dict, txt_padding_idx: int) -> None:
     bias_init_fn_ = _parse_init(bias_init, bias_init_weight, gain)
 
     with torch.no_grad():
-        for name, p in model.named_parameters():
+        for name, p in model.named_parameters(): #Loops over all model parameters
             if "s3d" not in name:
 
+                # embedding initializer
                 if "txt_embed" in name:
                     if "lut" in name:
                         embed_init_fn_(p)
 
+                # bias initializer
                 elif "bias" in name:
                     bias_init_fn_(p)
 
+                # weight matrix
                 elif len(p.size()) > 1:
 
                     # RNNs combine multiple matrices is one, which messes up
@@ -147,7 +156,7 @@ def initialize_model(model: nn.Module, cfg: dict, txt_padding_idx: int) -> None:
                         elif "decoder" in name:
                             n = 4 if isinstance(model.decoder.rnn, nn.LSTM) else 3
                         xavier_uniform_n_(p.data, gain=gain, n=n)
-                    else:
+                    else: #default weight initializer
                         init_fn_(p)
 
         # zero out paddings

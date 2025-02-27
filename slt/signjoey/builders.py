@@ -14,6 +14,8 @@ from torch.optim import lr_scheduler
 from torch.optim import Optimizer
 
 
+# prevent exploding gradients
+#  used in training.py? - I think
 def build_gradient_clipper(config: dict) -> Optional[Callable]:
     """
     Define the function for gradient clipping as specified in configuration.
@@ -29,23 +31,28 @@ def build_gradient_clipper(config: dict) -> Optional[Callable]:
     :return: clipping function (in-place) or None if no gradient clipping
     """
     clip_grad_fun = None
+    # Clamps gradients if they exceed a certain value
     if "clip_grad_val" in config.keys():
         clip_value = config["clip_grad_val"]
         clip_grad_fun = lambda params: nn.utils.clip_grad_value_(
             parameters=params, clip_value=clip_value
         )
+    # Rescales gradients if their norm is too large
     elif "clip_grad_norm" in config.keys():
         max_norm = config["clip_grad_norm"]
         clip_grad_fun = lambda params: nn.utils.clip_grad_norm_(
             parameters=params, max_norm=max_norm
         )
-
+    # Ensures only one type of clipping is applied
     if "clip_grad_val" in config.keys() and "clip_grad_norm" in config.keys():
         raise ValueError("You can only specify either clip_grad_val or clip_grad_norm.")
 
+    # Returns a function that can be applied during training
     return clip_grad_fun
 
 
+# Creates an optimizer based on the provided config
+# used in training.py?
 def build_optimizer(config: dict, parameters) -> Optimizer:
     """
     Create an optimizer for the given parameters as specified in config.
@@ -72,6 +79,7 @@ def build_optimizer(config: dict, parameters) -> Optimizer:
     :param parameters:
     :return: optimizer
     """
+    # Returns the specified optimizer object
     optimizer_name = config.get("optimizer", "radam").lower()
     learning_rate = config.get("learning_rate", 3.0e-4)
     weight_decay = config.get("weight_decay", 0)
@@ -99,6 +107,7 @@ def build_optimizer(config: dict, parameters) -> Optimizer:
             weight_decay=weight_decay,
             amsgrad=amsgrad,
         )
+    # Adaptive
     elif optimizer_name == "adagrad":
         return torch.optim.Adagrad(
             params=parameters,
@@ -115,6 +124,7 @@ def build_optimizer(config: dict, parameters) -> Optimizer:
             lr=learning_rate,
             weight_decay=weight_decay,
         )
+    # Momentum-based
     elif optimizer_name == "rmsprop":
         return torch.optim.RMSprop(
             params=parameters,
@@ -135,6 +145,8 @@ def build_optimizer(config: dict, parameters) -> Optimizer:
         raise ValueError("Unknown optimizer {}.".format(optimizer_name))
 
 
+# Creates a learning rate scheduler to adjust learning rates over time
+# used in training.py?
 def build_scheduler(
     config: dict, optimizer: Optimizer, scheduler_mode: str, hidden_size: int = 0
 ) -> (Optional[lr_scheduler._LRScheduler], Optional[str]):
@@ -164,6 +176,9 @@ def build_scheduler(
     """
     scheduler_name = config["scheduling"].lower()
 
+    # Returns scheduler object, when to apply scheduler
+
+    # Reduces lr when performance plateaus
     if scheduler_name == "plateau":
         # learning rate scheduler
         return (
@@ -209,10 +224,12 @@ def build_scheduler(
             ),
             "epoch",
         )
+    # Used in Transformer-based models
     elif scheduler_name == "noam":
         factor = config.get("learning_rate_factor", 1)
         warmup = config.get("learning_rate_warmup", 4000)
         return (
+            # call
             NoamScheduler(
                 hidden_size=hidden_size,
                 factor=factor,
@@ -221,6 +238,7 @@ def build_scheduler(
             ),
             "step",
         )
+    # Custom scheduler for smoother learning
     elif scheduler_name == "warmupexponentialdecay":
         min_rate = config.get("learning_rate_min", 1.0e-5)
         decay_rate = config.get("learning_rate_decay", 0.1)
@@ -228,6 +246,7 @@ def build_scheduler(
         peak_rate = config.get("learning_rate_peak", 1.0e-3)
         decay_length = config.get("learning_rate_decay_length", 10000)
         return (
+            # call
             WarmupExponentialDecayScheduler(
                 min_rate=min_rate,
                 decay_rate=decay_rate,
@@ -277,6 +296,7 @@ class NoamScheduler:
             p["lr"] = rate
         self._rate = rate
 
+    # stabilized training
     def _compute_rate(self):
         """Implement `lrate` above"""
         step = self._step
@@ -332,6 +352,7 @@ class WarmupExponentialDecayScheduler:
             p["lr"] = rate
         self._rate = rate
 
+    # Guarantees a minimum LR, preventing instability
     def _compute_rate(self):
         """Implement `lrate` above"""
         step = self._step

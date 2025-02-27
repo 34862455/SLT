@@ -6,6 +6,8 @@ import torch.nn.functional as F
 from signjoey.helpers import freeze_params
 
 
+# Returns an activation function based on activation_type
+# Used in Embeddings and SpatialEmbeddings to add non-linearity
 def get_activation(activation_type):
     if activation_type == "relu":
         return nn.ReLU()
@@ -32,6 +34,7 @@ def get_activation(activation_type):
     elif activation_type == "tanhshrink":
         return nn.Tanhshrink()
     else:
+        # Raises an error if an unknown activation type is provided
         raise ValueError("Unknown activation type {}".format(activation_type))
 
 
@@ -44,6 +47,7 @@ class MaskedNorm(nn.Module):
     def __init__(self, norm_type, num_groups, num_features):
         super().__init__()
         self.norm_type = norm_type
+        # Implements BatchNorm, GroupNorm, and LayerNorm for masked sequences
         if self.norm_type == "batch":
             self.norm = nn.BatchNorm1d(num_features=num_features)
         elif self.norm_type == "group":
@@ -55,16 +59,22 @@ class MaskedNorm(nn.Module):
 
         self.num_features = num_features
 
+    # Ensures that padding does not skew normalization statistics
+    #  Used in Embeddings() and SpatialEmbeddings()
     def forward(self, x: Tensor, mask: Tensor):
+        # If training, it selects only the valid (unmasked) features and normalizes them
         if self.training:
             reshaped = x.reshape([-1, self.num_features])
             reshaped_mask = mask.reshape([-1, 1]) > 0
+            # Extracts valid (non-padded) tokens
             selected = torch.masked_select(reshaped, reshaped_mask).reshape(
                 [-1, self.num_features]
             )
             batch_normed = self.norm(selected)
+            # Scatters the normalized values back to the original shape
             scattered = reshaped.masked_scatter(reshaped_mask, batch_normed)
             return scattered.reshape([x.shape[0], -1, self.num_features])
+        # If inference, applies normalization to all elements.
         else:
             reshaped = x.reshape([-1, self.num_features])
             batched_normed = self.norm(reshaped)
@@ -74,6 +84,7 @@ class MaskedNorm(nn.Module):
 # TODO (Cihan): Spatial and Word Embeddings are pretty much the same
 #       We might as well convert them into a single module class.
 #       Only difference is the lut vs linear layers.
+# Converts token indices into dense embeddings
 class Embeddings(nn.Module):
 
     """
@@ -108,18 +119,24 @@ class Embeddings(nn.Module):
 
         self.embedding_dim = embedding_dim
         self.vocab_size = vocab_size
-        self.lut = nn.Embedding(vocab_size, self.embedding_dim, padding_idx=padding_idx)
+        # stores pre-trained or randomly initialized embeddings
+        self.lut = nn.Embedding(vocab_size, self.embedding_dim, padding_idx=padding_idx) #padding tokens do not contribute to gradients
 
+        # normalization options
         self.norm_type = norm_type
         if self.norm_type:
+            # call
             self.norm = MaskedNorm(
                 norm_type=norm_type, num_groups=num_heads, num_features=embedding_dim
             )
 
+        # activation options
         self.activation_type = activation_type
         if self.activation_type:
+            # call
             self.activation = get_activation(activation_type)
 
+        # scaling options
         self.scale = scale
         if self.scale:
             if scale_factor:
@@ -131,6 +148,7 @@ class Embeddings(nn.Module):
             freeze_params(self)
 
     # pylint: disable=arguments-differ
+    # In encoders and decoders to process input sequences in text-based translation
     def forward(self, x: Tensor, mask: Tensor = None) -> Tensor:
         """
         Perform lookup for input `x` in the embedding table.
@@ -161,6 +179,7 @@ class Embeddings(nn.Module):
         )
 
 
+# Converts visual frame features into dense embeddings
 class SpatialEmbeddings(nn.Module):
 
     """
@@ -193,6 +212,7 @@ class SpatialEmbeddings(nn.Module):
 
         self.embedding_dim = embedding_dim
         self.input_size = input_size
+        # uses a linear transformation
         self.ln = nn.Linear(self.input_size, self.embedding_dim)
 
         self.norm_type = norm_type
