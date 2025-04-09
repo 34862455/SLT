@@ -1,13 +1,13 @@
 name: sign_experiment
 data:
-    data_path: /home/minneke/Documents/Projects/SignExperiments/data/
+    data_path: /home/minneke/Documents/Projects/SignExperiments/data
     version: phoenix_2014_trans
     sgn: sign
     txt: text
     gls: gloss
-    train: ASL_train.pt
-    dev: ASL_dev.pt
-    test: ASL_test.pt
+    train: DSG_train_subset.pt
+    dev: DSG_dev_subset.pt
+    test: DSG_test_subset.pt
     feature_size: 1024
     level: word
     txt_lowercase: true
@@ -50,17 +50,15 @@ training:
     reset_best_ckpt: false
     reset_scheduler: false
     reset_optimizer: false
-    random_seed: 30
+    random_seed: 42
     model_dir: "./sign_sample_model"
-    # load_model: /home/botlhale/Documents/Mokgadi_masters/checkpoints/Sign2Gloss/sign_sample_model/16500.ckpt
-    recognition_loss_weight: 0.0
+    recognition_loss_weight: 1.0
     translation_loss_weight: 1.0
     eval_metric: bleu
-    # eval_metric: wer
     optimizer: adam
-    learning_rate: 0.0001
-    batch_size: 128
-    num_valid_log: 3
+    learning_rate: 0.001
+    batch_size: 32
+    num_valid_log: 5
     epochs: 5000000
     early_stopping_metric: eval_metric
     batch_type: sentence
@@ -81,10 +79,9 @@ training:
     - 0.998
     scheduling: plateau
     learning_rate_min: 1.0e-07
-    weight_decay: 1.0e-08
-    eps: 1.0e-03
+    weight_decay: 0.001
     patience: 8
-    decrease_factor: 0.3
+    decrease_factor: 0.7
     label_smoothing: 0.0
 model:
     initializer: xavier
@@ -96,26 +93,26 @@ model:
     encoder:
         type: transformer
         num_layers: 3
-        num_heads: 4
+        num_heads: 8
         embeddings:
-            embedding_dim: 1024
+            embedding_dim: 512
             scale: false
             dropout: 0.1
             norm_type: batch
             activation_type: softsign
-        hidden_size: 1024
-        ff_size: 512
+        hidden_size: 512
+        ff_size: 2048
         dropout: 0.1
     decoder:
         type: transformer
         num_layers: 3
-        num_heads: 4
+        num_heads: 8
         embeddings:
-            embedding_dim: 1024
+            embedding_dim: 512
             scale: false
             dropout: 0.1
             norm_type: batch
             activation_type: softsign
-        hidden_size: 1024
-        ff_size: 512
+        hidden_size: 512
+        ff_size: 2048
         dropout: 0.1
