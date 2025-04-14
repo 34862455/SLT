@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# PyCharm settings
+.idea/
+
+# Jupyter and notebooks
+*.ipynb_checkpoints
+
+# Large files (model weights, datasets)
+*.pt
+*.ckpt
+
+# Logs and outputs
+*.log
+*.out
+*.tmp
