@@ -1,0 +1,21 @@
+conda install cudatoolkit~=11.0 cudnn
+pip install nvidia-pyindex
+pip install nvidia-cusolver~=10.0
+
+cd ~/.local/opt/miniconda3/envs/slt_legacy/lib
+ln -s ./python3.6/site-packages/nvidia/cusolver/lib/libcusolverMg.so.10 .
+ln -s ./python3.6/site-packages/nvidia/cusolver/lib/libcusolver.so.10 .
+
+==========================
+
+conda create -n <name> python=3.6
+pip install -r requirements_new.txt
+pip uninstall torch
+conda install pytorch~=1.10 cudnn~=8.0 -c pytorch -c conda-forge
+pip install transformers
+pip install nvidia-pyindex
+pip install nvidia-cusolver~=10.0
+
+cd ~/.local/opt/miniconda3/envs/slt_legacy/lib
+ln -s ./python3.6/site-packages/nvidia/cusolver/lib/libcusolverMg.so.10 .
+ln -s ./python3.6/site-packages/nvidia/cusolver/lib/libcusolver.so.10 .

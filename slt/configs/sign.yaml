@@ -78,7 +78,7 @@ training:
     - 0.9
     - 0.998
     scheduling: plateau
-    learning_rate_min: 1.0e-07
+    learning_rate_min: 1.0e-06
     weight_decay: 0.001
     patience: 8
     decrease_factor: 0.7

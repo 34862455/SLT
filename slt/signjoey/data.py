@@ -8,8 +8,12 @@ import random
 from xml.etree.ElementInclude import include
 
 import torch
-from torchtext.legacy import data # Handles dataset creation, tokenization, and batching
-from torchtext.legacy.data import Dataset, Iterator
+try:
+    from torchtext.legacy import data # Handles dataset creation, tokenization, and batching
+    from torchtext.legacy.data import Dataset, Iterator
+except ModuleNotFoundError:
+    from torchtext import data # Handles dataset creation, tokenization, and batching
+    from torchtext.data import Dataset, Iterator
 from torchvision.io import read_image,read_video # Reads image/video frames
 from torchvision import transforms as t
 import socket
@@ -167,8 +171,8 @@ def load_data(data_cfg: dict) -> (Dataset, Dataset, Dataset, Vocabulary, Vocabul
         tokenize=lambda features: features,  # TODO (Cihan): is this necessary?
         batch_first=True,
         include_lengths=True,
-        # postprocessing=stack_features,
-        postprocessing=load_rgb_frames,
+        postprocessing=stack_features,
+        # postprocessing=load_rgb_frames,
         pad_token=torch.zeros((pad_feature_size,)),
     )
 

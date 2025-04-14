@@ -2,8 +2,12 @@
 """
 Data module
 """
-from torchtext.legacy import data
-from torchtext.legacy.data import Field, RawField
+try:
+    from torchtext.legacy import data
+    from torchtext.legacy.data import Field, RawField
+except ModuleNotFoundError:
+    from torchtext import data
+    from torchtext.data import Field, RawField
 from typing import List, Tuple
 import pickle
 import gzip
@@ -128,6 +132,7 @@ class SignTranslationDataset(data.Dataset):
             # If include_masks is False
             else:
                 # Extracts text, gloss, and signer information
+                # print(f"[DEBUG] Sample[0] type: {type(tmp[0])}, len: {len(tmp[0])}")
                 for s in tmp:
                     seq_id = s["name"]
                     if seq_id in samples:

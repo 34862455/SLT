@@ -105,7 +105,7 @@ class Batch:
             
         else:
             # creates a mask from zero-padding
-            self.sgn_mask = (self.sgn != torch.zeros(sgn_dim))[..., 0].unsqueeze(1)
+            self.sgn_mask = (self.sgn != 0).any(dim=2, keepdim=True).transpose(1, 2)
         
 
         # Text

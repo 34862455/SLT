@@ -1,0 +1,540 @@
+2025-04-10 13:41:24,315 Hello! This is Joey-NMT.
+2025-04-10 13:41:24,418 Total params: 22679581
+2025-04-10 13:41:24,426 Trainable parameters: ['decoder.layer_norm.bias', 'decoder.layer_norm.weight', 'decoder.layers.0.dec_layer_norm.bias', 'decoder.layers.0.dec_layer_norm.weight', 'decoder.layers.0.feed_forward.layer_norm.bias', 'decoder.layers.0.feed_forward.layer_norm.weight', 'decoder.layers.0.feed_forward.pwff_layer.0.bias', 'decoder.layers.0.feed_forward.pwff_layer.0.weight', 'decoder.layers.0.feed_forward.pwff_layer.3.bias', 'decoder.layers.0.feed_forward.pwff_layer.3.weight', 'decoder.layers.0.src_trg_att.k_layer.bias', 'decoder.layers.0.src_trg_att.k_layer.weight', 'decoder.layers.0.src_trg_att.output_layer.bias', 'decoder.layers.0.src_trg_att.output_layer.weight', 'decoder.layers.0.src_trg_att.q_layer.bias', 'decoder.layers.0.src_trg_att.q_layer.weight', 'decoder.layers.0.src_trg_att.v_layer.bias', 'decoder.layers.0.src_trg_att.v_layer.weight', 'decoder.layers.0.trg_trg_att.k_layer.bias', 'decoder.layers.0.trg_trg_att.k_layer.weight', 'decoder.layers.0.trg_trg_att.output_layer.bias', 'decoder.layers.0.trg_trg_att.output_layer.weight', 'decoder.layers.0.trg_trg_att.q_layer.bias', 'decoder.layers.0.trg_trg_att.q_layer.weight', 'decoder.layers.0.trg_trg_att.v_layer.bias', 'decoder.layers.0.trg_trg_att.v_layer.weight', 'decoder.layers.0.x_layer_norm.bias', 'decoder.layers.0.x_layer_norm.weight', 'decoder.layers.1.dec_layer_norm.bias', 'decoder.layers.1.dec_layer_norm.weight', 'decoder.layers.1.feed_forward.layer_norm.bias', 'decoder.layers.1.feed_forward.layer_norm.weight', 'decoder.layers.1.feed_forward.pwff_layer.0.bias', 'decoder.layers.1.feed_forward.pwff_layer.0.weight', 'decoder.layers.1.feed_forward.pwff_layer.3.bias', 'decoder.layers.1.feed_forward.pwff_layer.3.weight', 'decoder.layers.1.src_trg_att.k_layer.bias', 'decoder.layers.1.src_trg_att.k_layer.weight', 'decoder.layers.1.src_trg_att.output_layer.bias', 'decoder.layers.1.src_trg_att.output_layer.weight', 'decoder.layers.1.src_trg_att.q_layer.bias', 'decoder.layers.1.src_trg_att.q_layer.weight', 'decoder.layers.1.src_trg_att.v_layer.bias', 'decoder.layers.1.src_trg_att.v_layer.weight', 'decoder.layers.1.trg_trg_att.k_layer.bias', 'decoder.layers.1.trg_trg_att.k_layer.weight', 'decoder.layers.1.trg_trg_att.output_layer.bias', 'decoder.layers.1.trg_trg_att.output_layer.weight', 'decoder.layers.1.trg_trg_att.q_layer.bias', 'decoder.layers.1.trg_trg_att.q_layer.weight', 'decoder.layers.1.trg_trg_att.v_layer.bias', 'decoder.layers.1.trg_trg_att.v_layer.weight', 'decoder.layers.1.x_layer_norm.bias', 'decoder.layers.1.x_layer_norm.weight', 'decoder.layers.2.dec_layer_norm.bias', 'decoder.layers.2.dec_layer_norm.weight', 'decoder.layers.2.feed_forward.layer_norm.bias', 'decoder.layers.2.feed_forward.layer_norm.weight', 'decoder.layers.2.feed_forward.pwff_layer.0.bias', 'decoder.layers.2.feed_forward.pwff_layer.0.weight', 'decoder.layers.2.feed_forward.pwff_layer.3.bias', 'decoder.layers.2.feed_forward.pwff_layer.3.weight', 'decoder.layers.2.src_trg_att.k_layer.bias', 'decoder.layers.2.src_trg_att.k_layer.weight', 'decoder.layers.2.src_trg_att.output_layer.bias', 'decoder.layers.2.src_trg_att.output_layer.weight', 'decoder.layers.2.src_trg_att.q_layer.bias', 'decoder.layers.2.src_trg_att.q_layer.weight', 'decoder.layers.2.src_trg_att.v_layer.bias', 'decoder.layers.2.src_trg_att.v_layer.weight', 'decoder.layers.2.trg_trg_att.k_layer.bias', 'decoder.layers.2.trg_trg_att.k_layer.weight', 'decoder.layers.2.trg_trg_att.output_layer.bias', 'decoder.layers.2.trg_trg_att.output_layer.weight', 'decoder.layers.2.trg_trg_att.q_layer.bias', 'decoder.layers.2.trg_trg_att.q_layer.weight', 'decoder.layers.2.trg_trg_att.v_layer.bias', 'decoder.layers.2.trg_trg_att.v_layer.weight', 'decoder.layers.2.x_layer_norm.bias', 'decoder.layers.2.x_layer_norm.weight', 'decoder.output_layer.weight', 'encoder.layer_norm.bias', 'encoder.layer_norm.weight', 'encoder.layers.0.feed_forward.layer_norm.bias', 'encoder.layers.0.feed_forward.layer_norm.weight', 'encoder.layers.0.feed_forward.pwff_layer.0.bias', 'encoder.layers.0.feed_forward.pwff_layer.0.weight', 'encoder.layers.0.feed_forward.pwff_layer.3.bias', 'encoder.layers.0.feed_forward.pwff_layer.3.weight', 'encoder.layers.0.layer_norm.bias', 'encoder.layers.0.layer_norm.weight', 'encoder.layers.0.src_src_att.k_layer.bias', 'encoder.layers.0.src_src_att.k_layer.weight', 'encoder.layers.0.src_src_att.output_layer.bias', 'encoder.layers.0.src_src_att.output_layer.weight', 'encoder.layers.0.src_src_att.q_layer.bias', 'encoder.layers.0.src_src_att.q_layer.weight', 'encoder.layers.0.src_src_att.v_layer.bias', 'encoder.layers.0.src_src_att.v_layer.weight', 'encoder.layers.1.feed_forward.layer_norm.bias', 'encoder.layers.1.feed_forward.layer_norm.weight', 'encoder.layers.1.feed_forward.pwff_layer.0.bias', 'encoder.layers.1.feed_forward.pwff_layer.0.weight', 'encoder.layers.1.feed_forward.pwff_layer.3.bias', 'encoder.layers.1.feed_forward.pwff_layer.3.weight', 'encoder.layers.1.layer_norm.bias', 'encoder.layers.1.layer_norm.weight', 'encoder.layers.1.src_src_att.k_layer.bias', 'encoder.layers.1.src_src_att.k_layer.weight', 'encoder.layers.1.src_src_att.output_layer.bias', 'encoder.layers.1.src_src_att.output_layer.weight', 'encoder.layers.1.src_src_att.q_layer.bias', 'encoder.layers.1.src_src_att.q_layer.weight', 'encoder.layers.1.src_src_att.v_layer.bias', 'encoder.layers.1.src_src_att.v_layer.weight', 'encoder.layers.2.feed_forward.layer_norm.bias', 'encoder.layers.2.feed_forward.layer_norm.weight', 'encoder.layers.2.feed_forward.pwff_layer.0.bias', 'encoder.layers.2.feed_forward.pwff_layer.0.weight', 'encoder.layers.2.feed_forward.pwff_layer.3.bias', 'encoder.layers.2.feed_forward.pwff_layer.3.weight', 'encoder.layers.2.layer_norm.bias', 'encoder.layers.2.layer_norm.weight', 'encoder.layers.2.src_src_att.k_layer.bias', 'encoder.layers.2.src_src_att.k_layer.weight', 'encoder.layers.2.src_src_att.output_layer.bias', 'encoder.layers.2.src_src_att.output_layer.weight', 'encoder.layers.2.src_src_att.q_layer.bias', 'encoder.layers.2.src_src_att.q_layer.weight', 'encoder.layers.2.src_src_att.v_layer.bias', 'encoder.layers.2.src_src_att.v_layer.weight', 'gloss_output_layer.bias', 'gloss_output_layer.weight', 'sgn_embed.ln.bias', 'sgn_embed.ln.weight', 'sgn_embed.norm.norm.bias', 'sgn_embed.norm.norm.weight', 'txt_embed.lut.weight', 'txt_embed.norm.norm.bias', 'txt_embed.norm.norm.weight']
+2025-04-10 13:41:24,571 cfg.name                           : sign_experiment
+2025-04-10 13:41:24,575 cfg.data.data_path                 : /home/minneke/Documents/Projects/SignExperiments/data
+2025-04-10 13:41:24,575 cfg.data.version                   : phoenix_2014_trans
+2025-04-10 13:41:24,575 cfg.data.sgn                       : sign
+2025-04-10 13:41:24,575 cfg.data.txt                       : text
+2025-04-10 13:41:24,575 cfg.data.gls                       : gloss
+2025-04-10 13:41:24,575 cfg.data.train                     : DSG_train_subset.pt
+2025-04-10 13:41:24,575 cfg.data.dev                       : DSG_dev_subset.pt
+2025-04-10 13:41:24,575 cfg.data.test                      : DSG_test_subset.pt
+2025-04-10 13:41:24,575 cfg.data.feature_size              : 1024
+2025-04-10 13:41:24,575 cfg.data.level                     : word
+2025-04-10 13:41:24,575 cfg.data.txt_lowercase             : True
+2025-04-10 13:41:24,575 cfg.data.max_sent_length           : 400
+2025-04-10 13:41:24,575 cfg.data.random_train_subset       : -1
+2025-04-10 13:41:24,575 cfg.data.random_dev_subset         : -1
+2025-04-10 13:41:24,575 cfg.data.include_masks             : False
+2025-04-10 13:41:24,575 cfg.testing.recognition_beam_sizes : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+2025-04-10 13:41:24,575 cfg.testing.translation_beam_sizes : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+2025-04-10 13:41:24,575 cfg.testing.translation_beam_alphas : [-1, 0, 1, 2, 3, 4, 5]
+2025-04-10 13:41:24,575 cfg.training.reset_best_ckpt       : False
+2025-04-10 13:41:24,575 cfg.training.reset_scheduler       : False
+2025-04-10 13:41:24,575 cfg.training.reset_optimizer       : False
+2025-04-10 13:41:24,575 cfg.training.random_seed           : 42
+2025-04-10 13:41:24,575 cfg.training.model_dir             : ./sign_sample_model
+2025-04-10 13:41:24,576 cfg.training.recognition_loss_weight : 1.0
+2025-04-10 13:41:24,576 cfg.training.translation_loss_weight : 1.0
+2025-04-10 13:41:24,576 cfg.training.eval_metric           : bleu
+2025-04-10 13:41:24,576 cfg.training.optimizer             : adam
+2025-04-10 13:41:24,576 cfg.training.learning_rate         : 0.001
+2025-04-10 13:41:24,576 cfg.training.batch_size            : 32
+2025-04-10 13:41:24,576 cfg.training.num_valid_log         : 5
+2025-04-10 13:41:24,576 cfg.training.epochs                : 5000000
+2025-04-10 13:41:24,576 cfg.training.early_stopping_metric : eval_metric
+2025-04-10 13:41:24,576 cfg.training.batch_type            : sentence
+2025-04-10 13:41:24,576 cfg.training.translation_normalization : batch
+2025-04-10 13:41:24,576 cfg.training.eval_recognition_beam_size : 1
+2025-04-10 13:41:24,576 cfg.training.eval_translation_beam_size : 1
+2025-04-10 13:41:24,576 cfg.training.eval_translation_beam_alpha : -1
+2025-04-10 13:41:24,576 cfg.training.overwrite             : True
+2025-04-10 13:41:24,576 cfg.training.shuffle               : True
+2025-04-10 13:41:24,576 cfg.training.use_cuda              : True
+2025-04-10 13:41:24,576 cfg.training.translation_max_output_length : 30
+2025-04-10 13:41:24,576 cfg.training.keep_last_ckpts       : 1
+2025-04-10 13:41:24,576 cfg.training.batch_multiplier      : 1
+2025-04-10 13:41:24,576 cfg.training.logging_freq          : 100
+2025-04-10 13:41:24,576 cfg.training.validation_freq       : 100
+2025-04-10 13:41:24,576 cfg.training.betas                 : [0.9, 0.998]
+2025-04-10 13:41:24,576 cfg.training.scheduling            : plateau
+2025-04-10 13:41:24,577 cfg.training.learning_rate_min     : 1e-07
+2025-04-10 13:41:24,577 cfg.training.weight_decay          : 0.001
+2025-04-10 13:41:24,577 cfg.training.patience              : 8
+2025-04-10 13:41:24,577 cfg.training.decrease_factor       : 0.7
+2025-04-10 13:41:24,577 cfg.training.label_smoothing       : 0.0
+2025-04-10 13:41:24,577 cfg.model.initializer              : xavier
+2025-04-10 13:41:24,577 cfg.model.bias_initializer         : zeros
+2025-04-10 13:41:24,577 cfg.model.init_gain                : 1.0
+2025-04-10 13:41:24,577 cfg.model.embed_initializer        : xavier
+2025-04-10 13:41:24,577 cfg.model.embed_init_gain          : 1.0
+2025-04-10 13:41:24,577 cfg.model.tied_softmax             : False
+2025-04-10 13:41:24,577 cfg.model.encoder.type             : transformer
+2025-04-10 13:41:24,577 cfg.model.encoder.num_layers       : 3
+2025-04-10 13:41:24,577 cfg.model.encoder.num_heads        : 8
+2025-04-10 13:41:24,577 cfg.model.encoder.embeddings.embedding_dim : 512
+2025-04-10 13:41:24,577 cfg.model.encoder.embeddings.scale : False
+2025-04-10 13:41:24,577 cfg.model.encoder.embeddings.dropout : 0.1
+2025-04-10 13:41:24,577 cfg.model.encoder.embeddings.norm_type : batch
+2025-04-10 13:41:24,577 cfg.model.encoder.embeddings.activation_type : softsign
+2025-04-10 13:41:24,577 cfg.model.encoder.hidden_size      : 512
+2025-04-10 13:41:24,577 cfg.model.encoder.ff_size          : 2048
+2025-04-10 13:41:24,577 cfg.model.encoder.dropout          : 0.1
+2025-04-10 13:41:24,577 cfg.model.decoder.type             : transformer
+2025-04-10 13:41:24,577 cfg.model.decoder.num_layers       : 3
+2025-04-10 13:41:24,577 cfg.model.decoder.num_heads        : 8
+2025-04-10 13:41:24,577 cfg.model.decoder.embeddings.embedding_dim : 512
+2025-04-10 13:41:24,577 cfg.model.decoder.embeddings.scale : False
+2025-04-10 13:41:24,577 cfg.model.decoder.embeddings.dropout : 0.1
+2025-04-10 13:41:24,577 cfg.model.decoder.embeddings.norm_type : batch
+2025-04-10 13:41:24,577 cfg.model.decoder.embeddings.activation_type : softsign
+2025-04-10 13:41:24,577 cfg.model.decoder.hidden_size      : 512
+2025-04-10 13:41:24,577 cfg.model.decoder.ff_size          : 2048
+2025-04-10 13:41:24,577 cfg.model.decoder.dropout          : 0.1
+2025-04-10 13:41:24,578 Data set sizes: 
+	train 5,
+	valid 5,
+	test 5
+2025-04-10 13:41:24,578 First training example:
+	[GLS] JETZT WETTER MORGEN DONNERSTAG ZWOELF FEBRUAR
+	[TXT] und nun die wettervorhersage für morgen donnerstag den zwölften august
+2025-04-10 13:41:24,578 First 10 words (gls): (0) <si> (1) <unk> (2) <pad> (3) REGEN (4) KOENNEN (5) GEWITTER (6) NORDWEST (7) ORT (8) BLEIBEN (9) DAZU
+2025-04-10 13:41:24,578 First 10 words (txt): (0) <unk> (1) <pad> (2) <s> (3) </s> (4) und (5) auch (6) es (7) im (8) mit (9) nordwesten
+2025-04-10 13:41:24,578 Number of unique glosses (types): 29
+2025-04-10 13:41:24,578 Number of unique words (types): 65
+2025-04-10 13:41:24,578 SignModel(
+	encoder=TransformerEncoder(num_layers=3, num_heads=8),
+	decoder=TransformerDecoder(num_layers=3, num_heads=8),
+	sgn_embed=SpatialEmbeddings(embedding_dim=512, input_size=1024),
+	txt_embed=Embeddings(embedding_dim=512, vocab_size=65))
+2025-04-10 13:41:24,582 EPOCH 1
+2025-04-10 13:41:25,235 Epoch   1: Total Training Recognition Loss 5.28  Total Training Translation Loss 74.77 
+2025-04-10 13:41:25,241 EPOCH 2
+2025-04-10 13:41:25,498 Epoch   2: Total Training Recognition Loss 3.87  Total Training Translation Loss 86.83 
+2025-04-10 13:41:25,510 EPOCH 3
+2025-04-10 13:41:25,739 Epoch   3: Total Training Recognition Loss 4.31  Total Training Translation Loss 86.85 
+2025-04-10 13:41:25,742 EPOCH 4
+2025-04-10 13:41:25,795 Epoch   4: Total Training Recognition Loss 3.47  Total Training Translation Loss 82.32 
+2025-04-10 13:41:25,796 EPOCH 5
+2025-04-10 13:41:25,847 Epoch   5: Total Training Recognition Loss 3.22  Total Training Translation Loss 79.18 
+2025-04-10 13:41:25,848 EPOCH 6
+2025-04-10 13:41:25,899 Epoch   6: Total Training Recognition Loss 3.16  Total Training Translation Loss 76.17 
+2025-04-10 13:41:25,899 EPOCH 7
+2025-04-10 13:41:25,944 Epoch   7: Total Training Recognition Loss 2.91  Total Training Translation Loss 73.13 
+2025-04-10 13:41:25,944 EPOCH 8
+2025-04-10 13:41:25,983 Epoch   8: Total Training Recognition Loss 2.93  Total Training Translation Loss 68.08 
+2025-04-10 13:41:25,983 EPOCH 9
+2025-04-10 13:41:26,020 Epoch   9: Total Training Recognition Loss 2.82  Total Training Translation Loss 60.49 
+2025-04-10 13:41:26,020 EPOCH 10
+2025-04-10 13:41:26,070 Epoch  10: Total Training Recognition Loss 2.91  Total Training Translation Loss 44.96 
+2025-04-10 13:41:26,070 EPOCH 11
+2025-04-10 13:41:26,109 Epoch  11: Total Training Recognition Loss 3.27  Total Training Translation Loss 108.62 
+2025-04-10 13:41:26,110 EPOCH 12
+2025-04-10 13:41:26,148 Epoch  12: Total Training Recognition Loss 2.61  Total Training Translation Loss 43.00 
+2025-04-10 13:41:26,149 EPOCH 13
+2025-04-10 13:41:26,186 Epoch  13: Total Training Recognition Loss 2.71  Total Training Translation Loss 46.36 
+2025-04-10 13:41:26,186 EPOCH 14
+2025-04-10 13:41:26,246 Epoch  14: Total Training Recognition Loss 2.51  Total Training Translation Loss 47.09 
+2025-04-10 13:41:26,246 EPOCH 15
+2025-04-10 13:41:26,298 Epoch  15: Total Training Recognition Loss 2.33  Total Training Translation Loss 44.81 
+2025-04-10 13:41:26,299 EPOCH 16
+2025-04-10 13:41:26,351 Epoch  16: Total Training Recognition Loss 2.30  Total Training Translation Loss 41.56 
+2025-04-10 13:41:26,351 EPOCH 17
+2025-04-10 13:41:26,395 Epoch  17: Total Training Recognition Loss 2.33  Total Training Translation Loss 37.02 
+2025-04-10 13:41:26,395 EPOCH 18
+2025-04-10 13:41:26,431 Epoch  18: Total Training Recognition Loss 2.28  Total Training Translation Loss 34.77 
+2025-04-10 13:41:26,432 EPOCH 19
+2025-04-10 13:41:26,474 Epoch  19: Total Training Recognition Loss 2.22  Total Training Translation Loss 30.28 
+2025-04-10 13:41:26,474 EPOCH 20
+2025-04-10 13:41:26,510 Epoch  20: Total Training Recognition Loss 2.17  Total Training Translation Loss 26.76 
+2025-04-10 13:41:26,511 EPOCH 21
+2025-04-10 13:41:26,574 Epoch  21: Total Training Recognition Loss 2.13  Total Training Translation Loss 22.22 
+2025-04-10 13:41:26,574 EPOCH 22
+2025-04-10 13:41:26,630 Epoch  22: Total Training Recognition Loss 2.06  Total Training Translation Loss 19.28 
+2025-04-10 13:41:26,630 EPOCH 23
+2025-04-10 13:41:26,670 Epoch  23: Total Training Recognition Loss 2.06  Total Training Translation Loss 17.97 
+2025-04-10 13:41:26,670 EPOCH 24
+2025-04-10 13:41:26,714 Epoch  24: Total Training Recognition Loss 1.99  Total Training Translation Loss 15.25 
+2025-04-10 13:41:26,715 EPOCH 25
+2025-04-10 13:41:26,765 Epoch  25: Total Training Recognition Loss 1.98  Total Training Translation Loss 13.78 
+2025-04-10 13:41:26,765 EPOCH 26
+2025-04-10 13:41:26,815 Epoch  26: Total Training Recognition Loss 1.97  Total Training Translation Loss 12.47 
+2025-04-10 13:41:26,816 EPOCH 27
+2025-04-10 13:41:26,856 Epoch  27: Total Training Recognition Loss 1.91  Total Training Translation Loss 10.33 
+2025-04-10 13:41:26,856 EPOCH 28
+2025-04-10 13:41:26,900 Epoch  28: Total Training Recognition Loss 1.88  Total Training Translation Loss 8.93 
+2025-04-10 13:41:26,900 EPOCH 29
+2025-04-10 13:41:26,943 Epoch  29: Total Training Recognition Loss 1.90  Total Training Translation Loss 7.79 
+2025-04-10 13:41:26,943 EPOCH 30
+2025-04-10 13:41:26,983 Epoch  30: Total Training Recognition Loss 1.80  Total Training Translation Loss 6.49 
+2025-04-10 13:41:26,983 EPOCH 31
+2025-04-10 13:41:27,021 Epoch  31: Total Training Recognition Loss 1.79  Total Training Translation Loss 5.79 
+2025-04-10 13:41:27,021 EPOCH 32
+2025-04-10 13:41:27,062 Epoch  32: Total Training Recognition Loss 1.78  Total Training Translation Loss 4.45 
+2025-04-10 13:41:27,062 EPOCH 33
+2025-04-10 13:41:27,099 Epoch  33: Total Training Recognition Loss 1.80  Total Training Translation Loss 4.07 
+2025-04-10 13:41:27,099 EPOCH 34
+2025-04-10 13:41:27,136 Epoch  34: Total Training Recognition Loss 1.77  Total Training Translation Loss 3.26 
+2025-04-10 13:41:27,136 EPOCH 35
+2025-04-10 13:41:27,172 Epoch  35: Total Training Recognition Loss 1.72  Total Training Translation Loss 2.68 
+2025-04-10 13:41:27,172 EPOCH 36
+2025-04-10 13:41:27,221 Epoch  36: Total Training Recognition Loss 1.73  Total Training Translation Loss 2.31 
+2025-04-10 13:41:27,222 EPOCH 37
+2025-04-10 13:41:27,266 Epoch  37: Total Training Recognition Loss 1.76  Total Training Translation Loss 1.78 
+2025-04-10 13:41:27,267 EPOCH 38
+2025-04-10 13:41:27,319 Epoch  38: Total Training Recognition Loss 1.70  Total Training Translation Loss 1.57 
+2025-04-10 13:41:27,320 EPOCH 39
+2025-04-10 13:41:27,358 Epoch  39: Total Training Recognition Loss 1.67  Total Training Translation Loss 1.73 
+2025-04-10 13:41:27,358 EPOCH 40
+2025-04-10 13:41:27,395 Epoch  40: Total Training Recognition Loss 1.65  Total Training Translation Loss 1.64 
+2025-04-10 13:41:27,395 EPOCH 41
+2025-04-10 13:41:27,447 Epoch  41: Total Training Recognition Loss 1.66  Total Training Translation Loss 0.95 
+2025-04-10 13:41:27,448 EPOCH 42
+2025-04-10 13:41:27,491 Epoch  42: Total Training Recognition Loss 1.65  Total Training Translation Loss 0.90 
+2025-04-10 13:41:27,491 EPOCH 43
+2025-04-10 13:41:27,553 Epoch  43: Total Training Recognition Loss 1.69  Total Training Translation Loss 1.41 
+2025-04-10 13:41:27,554 EPOCH 44
+2025-04-10 13:41:27,598 Epoch  44: Total Training Recognition Loss 1.63  Total Training Translation Loss 0.96 
+2025-04-10 13:41:27,598 EPOCH 45
+2025-04-10 13:41:27,635 Epoch  45: Total Training Recognition Loss 1.63  Total Training Translation Loss 0.94 
+2025-04-10 13:41:27,635 EPOCH 46
+2025-04-10 13:41:27,678 Epoch  46: Total Training Recognition Loss 1.57  Total Training Translation Loss 0.79 
+2025-04-10 13:41:27,679 EPOCH 47
+2025-04-10 13:41:27,715 Epoch  47: Total Training Recognition Loss 1.62  Total Training Translation Loss 0.59 
+2025-04-10 13:41:27,715 EPOCH 48
+2025-04-10 13:41:27,774 Epoch  48: Total Training Recognition Loss 1.57  Total Training Translation Loss 0.57 
+2025-04-10 13:41:27,774 EPOCH 49
+2025-04-10 13:41:27,811 Epoch  49: Total Training Recognition Loss 1.58  Total Training Translation Loss 0.75 
+2025-04-10 13:41:27,811 EPOCH 50
+2025-04-10 13:41:27,849 Epoch  50: Total Training Recognition Loss 1.54  Total Training Translation Loss 0.38 
+2025-04-10 13:41:27,849 EPOCH 51
+2025-04-10 13:41:27,898 Epoch  51: Total Training Recognition Loss 1.52  Total Training Translation Loss 0.48 
+2025-04-10 13:41:27,898 EPOCH 52
+2025-04-10 13:41:27,935 Epoch  52: Total Training Recognition Loss 1.51  Total Training Translation Loss 0.38 
+2025-04-10 13:41:27,935 EPOCH 53
+2025-04-10 13:41:27,986 Epoch  53: Total Training Recognition Loss 1.45  Total Training Translation Loss 0.41 
+2025-04-10 13:41:27,986 EPOCH 54
+2025-04-10 13:41:28,030 Epoch  54: Total Training Recognition Loss 1.50  Total Training Translation Loss 0.28 
+2025-04-10 13:41:28,030 EPOCH 55
+2025-04-10 13:41:28,079 Epoch  55: Total Training Recognition Loss 1.47  Total Training Translation Loss 0.20 
+2025-04-10 13:41:28,080 EPOCH 56
+2025-04-10 13:41:28,118 Epoch  56: Total Training Recognition Loss 1.47  Total Training Translation Loss 0.21 
+2025-04-10 13:41:28,119 EPOCH 57
+2025-04-10 13:41:28,170 Epoch  57: Total Training Recognition Loss 1.41  Total Training Translation Loss 0.38 
+2025-04-10 13:41:28,170 EPOCH 58
+2025-04-10 13:41:28,207 Epoch  58: Total Training Recognition Loss 1.45  Total Training Translation Loss 0.20 
+2025-04-10 13:41:28,207 EPOCH 59
+2025-04-10 13:41:28,244 Epoch  59: Total Training Recognition Loss 1.43  Total Training Translation Loss 0.25 
+2025-04-10 13:41:28,244 EPOCH 60
+2025-04-10 13:41:28,281 Epoch  60: Total Training Recognition Loss 1.38  Total Training Translation Loss 0.42 
+2025-04-10 13:41:28,281 EPOCH 61
+2025-04-10 13:41:28,318 Epoch  61: Total Training Recognition Loss 1.40  Total Training Translation Loss 0.19 
+2025-04-10 13:41:28,319 EPOCH 62
+2025-04-10 13:41:28,367 Epoch  62: Total Training Recognition Loss 1.39  Total Training Translation Loss 0.16 
+2025-04-10 13:41:28,367 EPOCH 63
+2025-04-10 13:41:28,410 Epoch  63: Total Training Recognition Loss 1.37  Total Training Translation Loss 0.11 
+2025-04-10 13:41:28,410 EPOCH 64
+2025-04-10 13:41:28,460 Epoch  64: Total Training Recognition Loss 1.37  Total Training Translation Loss 0.82 
+2025-04-10 13:41:28,460 EPOCH 65
+2025-04-10 13:41:28,498 Epoch  65: Total Training Recognition Loss 1.38  Total Training Translation Loss 0.10 
+2025-04-10 13:41:28,498 EPOCH 66
+2025-04-10 13:41:28,538 Epoch  66: Total Training Recognition Loss 1.32  Total Training Translation Loss 0.11 
+2025-04-10 13:41:28,538 EPOCH 67
+2025-04-10 13:41:28,593 Epoch  67: Total Training Recognition Loss 1.30  Total Training Translation Loss 0.11 
+2025-04-10 13:41:28,593 EPOCH 68
+2025-04-10 13:41:28,646 Epoch  68: Total Training Recognition Loss 1.27  Total Training Translation Loss 0.05 
+2025-04-10 13:41:28,646 EPOCH 69
+2025-04-10 13:41:28,684 Epoch  69: Total Training Recognition Loss 1.27  Total Training Translation Loss 0.12 
+2025-04-10 13:41:28,684 EPOCH 70
+2025-04-10 13:41:28,723 Epoch  70: Total Training Recognition Loss 1.28  Total Training Translation Loss 0.32 
+2025-04-10 13:41:28,723 EPOCH 71
+2025-04-10 13:41:28,761 Epoch  71: Total Training Recognition Loss 1.28  Total Training Translation Loss 0.13 
+2025-04-10 13:41:28,761 EPOCH 72
+2025-04-10 13:41:28,798 Epoch  72: Total Training Recognition Loss 1.25  Total Training Translation Loss 0.36 
+2025-04-10 13:41:28,798 EPOCH 73
+2025-04-10 13:41:28,850 Epoch  73: Total Training Recognition Loss 1.24  Total Training Translation Loss 0.07 
+2025-04-10 13:41:28,850 EPOCH 74
+2025-04-10 13:41:28,904 Epoch  74: Total Training Recognition Loss 1.21  Total Training Translation Loss 0.11 
+2025-04-10 13:41:28,904 EPOCH 75
+2025-04-10 13:41:28,945 Epoch  75: Total Training Recognition Loss 1.20  Total Training Translation Loss 1.02 
+2025-04-10 13:41:28,945 EPOCH 76
+2025-04-10 13:41:28,982 Epoch  76: Total Training Recognition Loss 1.18  Total Training Translation Loss 0.07 
+2025-04-10 13:41:28,982 EPOCH 77
+2025-04-10 13:41:29,020 Epoch  77: Total Training Recognition Loss 1.13  Total Training Translation Loss 0.12 
+2025-04-10 13:41:29,020 EPOCH 78
+2025-04-10 13:41:29,071 Epoch  78: Total Training Recognition Loss 1.12  Total Training Translation Loss 0.17 
+2025-04-10 13:41:29,072 EPOCH 79
+2025-04-10 13:41:29,109 Epoch  79: Total Training Recognition Loss 1.13  Total Training Translation Loss 0.29 
+2025-04-10 13:41:29,109 EPOCH 80
+2025-04-10 13:41:29,146 Epoch  80: Total Training Recognition Loss 1.12  Total Training Translation Loss 0.08 
+2025-04-10 13:41:29,148 EPOCH 81
+2025-04-10 13:41:29,186 Epoch  81: Total Training Recognition Loss 1.10  Total Training Translation Loss 0.17 
+2025-04-10 13:41:29,186 EPOCH 82
+2025-04-10 13:41:29,224 Epoch  82: Total Training Recognition Loss 1.09  Total Training Translation Loss 0.18 
+2025-04-10 13:41:29,224 EPOCH 83
+2025-04-10 13:41:29,278 Epoch  83: Total Training Recognition Loss 1.05  Total Training Translation Loss 0.06 
+2025-04-10 13:41:29,280 EPOCH 84
+2025-04-10 13:41:29,322 Epoch  84: Total Training Recognition Loss 1.06  Total Training Translation Loss 0.06 
+2025-04-10 13:41:29,323 EPOCH 85
+2025-04-10 13:41:29,360 Epoch  85: Total Training Recognition Loss 1.05  Total Training Translation Loss 0.09 
+2025-04-10 13:41:29,361 EPOCH 86
+2025-04-10 13:41:29,398 Epoch  86: Total Training Recognition Loss 1.00  Total Training Translation Loss 0.29 
+2025-04-10 13:41:29,399 EPOCH 87
+2025-04-10 13:41:29,464 Epoch  87: Total Training Recognition Loss 1.00  Total Training Translation Loss 0.08 
+2025-04-10 13:41:29,465 EPOCH 88
+2025-04-10 13:41:29,502 Epoch  88: Total Training Recognition Loss 1.01  Total Training Translation Loss 0.29 
+2025-04-10 13:41:29,502 EPOCH 89
+2025-04-10 13:41:29,574 Epoch  89: Total Training Recognition Loss 0.94  Total Training Translation Loss 0.10 
+2025-04-10 13:41:29,574 EPOCH 90
+2025-04-10 13:41:29,619 Epoch  90: Total Training Recognition Loss 0.96  Total Training Translation Loss 0.27 
+2025-04-10 13:41:29,619 EPOCH 91
+2025-04-10 13:41:29,656 Epoch  91: Total Training Recognition Loss 0.94  Total Training Translation Loss 0.06 
+2025-04-10 13:41:29,657 EPOCH 92
+2025-04-10 13:41:29,694 Epoch  92: Total Training Recognition Loss 0.94  Total Training Translation Loss 0.04 
+2025-04-10 13:41:29,695 EPOCH 93
+2025-04-10 13:41:29,734 Epoch  93: Total Training Recognition Loss 0.90  Total Training Translation Loss 0.05 
+2025-04-10 13:41:29,734 EPOCH 94
+2025-04-10 13:41:29,784 Epoch  94: Total Training Recognition Loss 0.86  Total Training Translation Loss 0.06 
+2025-04-10 13:41:29,785 EPOCH 95
+2025-04-10 13:41:29,824 Epoch  95: Total Training Recognition Loss 0.86  Total Training Translation Loss 0.07 
+2025-04-10 13:41:29,825 EPOCH 96
+2025-04-10 13:41:29,872 Epoch  96: Total Training Recognition Loss 0.81  Total Training Translation Loss 0.04 
+2025-04-10 13:41:29,872 EPOCH 97
+2025-04-10 13:41:29,911 Epoch  97: Total Training Recognition Loss 0.81  Total Training Translation Loss 0.04 
+2025-04-10 13:41:29,912 EPOCH 98
+2025-04-10 13:41:29,951 Epoch  98: Total Training Recognition Loss 0.81  Total Training Translation Loss 0.22 
+2025-04-10 13:41:29,951 EPOCH 99
+2025-04-10 13:41:29,988 Epoch  99: Total Training Recognition Loss 0.81  Total Training Translation Loss 0.02 
+2025-04-10 13:41:29,988 EPOCH 100
+2025-04-10 13:41:30,078 [Epoch: 100 Step: 00000100] Batch Recognition Loss:   0.737829 => Gls Tokens per Sec:      459 || Batch Translation Loss:   0.059326 => Txt Tokens per Sec:      944 || Lr: 0.001000
+2025-04-10 13:41:30,951 Hooray! New best validation result [eval_metric]!
+2025-04-10 13:41:30,954 Saving new checkpoint.
+2025-04-10 13:41:31,613 Validation result at epoch 100, step      100: duration: 1.5326s
+	Recognition Beam Size: 1	Translation Beam Size: 1	Translation Beam Alpha: -1
+	Recognition Loss: 5.76165	Translation Loss: 690.54437	PPL: 22200.93750
+	Eval Metric: BLEU
+	WER 85.71	(DEL: 65.71,	INS: 0.00,	SUB: 20.00)
+	BLEU-4 8.19	(BLEU-1: 16.90,	BLEU-2: 11.32,	BLEU-3: 9.43,	BLEU-4: 8.19)
+	CHRF 32.49	ROUGE 20.22
+2025-04-10 13:41:31,639 Logging Recognition and Translation Outputs
+2025-04-10 13:41:31,639 ========================================================================================================================
+2025-04-10 13:41:31,639 Logging Sequence: 11August_2010_Wednesday_tagesschau-2
+2025-04-10 13:41:31,645 	Gloss Reference :	DRUCK TIEF     KOMMEN
+2025-04-10 13:41:31,645 	Gloss Hypothesis:	WOLKE SPEZIELL LOCH  
+2025-04-10 13:41:31,645 	Gloss Alignment :	S     S        S     
+2025-04-10 13:41:31,645 	--------------------------------------------------------------------------------------------------------------------
+2025-04-10 13:41:31,646 	Text Reference  :	tiefer luftdruck bestimmt     in     den  nächsten tagen unser wetter    
+2025-04-10 13:41:31,646 	Text Hypothesis :	****** größere   wolkenlücken finden sich vor      allem im    nordwesten
+2025-04-10 13:41:31,646 	Text Alignment  :	D      S         S            S      S    S        S     S     S         
+2025-04-10 13:41:31,646 ========================================================================================================================
+2025-04-10 13:41:31,646 Logging Sequence: 11August_2010_Wednesday_tagesschau-3
+2025-04-10 13:41:31,646 	Gloss Reference :	ES-BEDEUTET VIEL WOLKE UND KOENNEN REGEN GEWITTER KOENNEN
+2025-04-10 13:41:31,646 	Gloss Hypothesis:	*********** **** ***** *** ******* REGEN ******** *******
+2025-04-10 13:41:31,646 	Gloss Alignment :	D           D    D     D   D             D        D      
+2025-04-10 13:41:31,646 	--------------------------------------------------------------------------------------------------------------------
+2025-04-10 13:41:31,648 	Text Reference  :	** ********** ****** ** ***** ***** ***** ******* das   bedeutet viele wolken    und       immer    wieder    zum    teil    kräftige schauer und gewitter
+2025-04-10 13:41:31,648 	Text Hypothesis :	im nordwesten bleibt es heute nacht meist trocken sonst muss     mit   teilweise kräftigen schauern gerechnet werden örtlich mit      blitz   und donner  
+2025-04-10 13:41:31,648 	Text Alignment  :	I  I          I      I  I     I     I     I       S     S        S     S         S         S        S         S      S       S        S           S       
+2025-04-10 13:41:31,648 ========================================================================================================================
+2025-04-10 13:41:31,648 Logging Sequence: 11August_2010_Wednesday_tagesschau-8
+2025-04-10 13:41:31,648 	Gloss Reference :	WIND MAESSIG SCHWACH REGION WENN GEWITTER WIND  KOENNEN
+2025-04-10 13:41:31,648 	Gloss Hypothesis:	**** ******* ******* ****** **** KOENNEN  REGEN KOENNEN
+2025-04-10 13:41:31,648 	Gloss Alignment :	D    D       D       D      D    S        S            
+2025-04-10 13:41:31,648 	--------------------------------------------------------------------------------------------------------------------
+2025-04-10 13:41:31,649 	Text Reference  :	meist weht nur ein schwacher wind        aus    unterschiedlichen richtungen der    bei schauern und  gewittern stark            böig sein   kann   
+2025-04-10 13:41:31,649 	Text Hypothesis :	***** **** *** *** ********* mancherorts regnet es                auch       länger und ergiebig auch lokale    überschwemmungen sind wieder möglich
+2025-04-10 13:41:31,649 	Text Alignment  :	D     D    D   D   D         S           S      S                 S          S      S   S        S    S         S                S    S      S      
+2025-04-10 13:41:31,649 ========================================================================================================================
+2025-04-10 13:41:31,649 Logging Sequence: 25October_2010_Monday_tagesschau-22
+2025-04-10 13:41:31,650 	Gloss Reference :	MITTWOCH REGEN KOENNEN NORDWEST WAHRSCHEINLICH NORD STARK WIND
+2025-04-10 13:41:31,650 	Gloss Hypothesis:	******** REGEN ******* ******** ************** **** ***** ****
+2025-04-10 13:41:31,650 	Gloss Alignment :	D              D       D        D              D    D     D   
+2025-04-10 13:41:31,650 	--------------------------------------------------------------------------------------------------------------------
+2025-04-10 13:41:31,652 	Text Reference  :	**** am *** **** ** ********** mittwoch hier und      da      nieselregen in       der nordwesthälfte an      den      küsten kräftiger wind       
+2025-04-10 13:41:31,652 	Text Hypothesis :	auch am tag gibt es verbreitet zum      teil kräftige schauer oder        gewitter und in             manchen regionen fallen ergiebige regenmengen
+2025-04-10 13:41:31,652 	Text Alignment  :	I       I   I    I  I          S        S    S        S       S           S        S   S              S       S        S      S         S          
+2025-04-10 13:41:31,652 ========================================================================================================================
+2025-04-10 13:41:31,652 Logging Sequence: 05May_2011_Thursday_tagesschau-25
+2025-04-10 13:41:31,652 	Gloss Reference :	JETZT WETTER WIE-AUSSEHEN MORGEN FREITAG SECHSTE MAI        ZEIGEN-BILDSCHIRM
+2025-04-10 13:41:31,652 	Gloss Hypothesis:	JETZT WETTER ************ ****** ******* ******* DONNERSTAG FEBRUAR          
+2025-04-10 13:41:31,652 	Gloss Alignment :	             D            D      D       D       S          S                
+2025-04-10 13:41:31,652 	--------------------------------------------------------------------------------------------------------------------
+2025-04-10 13:41:31,653 	Text Reference  :	und nun die wettervorhersage für morgen freitag    den sechsten mai   
+2025-04-10 13:41:31,653 	Text Hypothesis :	und nun die wettervorhersage für morgen donnerstag den zwölften august
+2025-04-10 13:41:31,653 	Text Alignment  :	                                        S              S        S     
+2025-04-10 13:41:31,653 ========================================================================================================================
+2025-04-10 13:41:31,654 Epoch 100: Total Training Recognition Loss 0.74  Total Training Translation Loss 0.06 
+2025-04-10 13:41:31,654 EPOCH 101
+2025-04-10 13:41:32,751 Epoch 101: Total Training Recognition Loss 0.77  Total Training Translation Loss 0.17 
+2025-04-10 13:41:32,763 EPOCH 102
+2025-04-10 13:41:33,782 Epoch 102: Total Training Recognition Loss 0.75  Total Training Translation Loss 0.06 
+2025-04-10 13:41:33,789 EPOCH 103
+2025-04-10 13:41:34,209 Epoch 103: Total Training Recognition Loss 0.68  Total Training Translation Loss 0.13 
+2025-04-10 13:41:34,234 EPOCH 104
+2025-04-10 13:41:34,605 Epoch 104: Total Training Recognition Loss 0.68  Total Training Translation Loss 0.07 
+2025-04-10 13:41:34,611 EPOCH 105
+2025-04-10 13:41:34,697 Epoch 105: Total Training Recognition Loss 0.68  Total Training Translation Loss 0.12 
+2025-04-10 13:41:34,697 EPOCH 106
+2025-04-10 13:41:34,743 Epoch 106: Total Training Recognition Loss 0.69  Total Training Translation Loss 0.05 
+2025-04-10 13:41:34,743 EPOCH 107
+2025-04-10 13:41:34,794 Epoch 107: Total Training Recognition Loss 0.64  Total Training Translation Loss 0.08 
+2025-04-10 13:41:34,794 EPOCH 108
+2025-04-10 13:41:34,879 Epoch 108: Total Training Recognition Loss 0.64  Total Training Translation Loss 0.11 
+2025-04-10 13:41:34,879 EPOCH 109
+2025-04-10 13:41:34,929 Epoch 109: Total Training Recognition Loss 0.60  Total Training Translation Loss 0.10 
+2025-04-10 13:41:34,929 EPOCH 110
+2025-04-10 13:41:34,980 Epoch 110: Total Training Recognition Loss 0.60  Total Training Translation Loss 0.04 
+2025-04-10 13:41:34,980 EPOCH 111
+2025-04-10 13:41:35,021 Epoch 111: Total Training Recognition Loss 0.59  Total Training Translation Loss 0.18 
+2025-04-10 13:41:35,021 EPOCH 112
+2025-04-10 13:41:35,072 Epoch 112: Total Training Recognition Loss 0.55  Total Training Translation Loss 0.22 
+2025-04-10 13:41:35,072 EPOCH 113
+2025-04-10 13:41:35,114 Epoch 113: Total Training Recognition Loss 0.54  Total Training Translation Loss 0.07 
+2025-04-10 13:41:35,115 EPOCH 114
+2025-04-10 13:41:35,153 Epoch 114: Total Training Recognition Loss 0.58  Total Training Translation Loss 0.04 
+2025-04-10 13:41:35,153 EPOCH 115
+2025-04-10 13:41:35,195 Epoch 115: Total Training Recognition Loss 0.55  Total Training Translation Loss 0.30 
+2025-04-10 13:41:35,195 EPOCH 116
+2025-04-10 13:41:35,235 Epoch 116: Total Training Recognition Loss 0.49  Total Training Translation Loss 0.05 
+2025-04-10 13:41:35,235 EPOCH 117
+2025-04-10 13:41:35,288 Epoch 117: Total Training Recognition Loss 0.47  Total Training Translation Loss 0.02 
+2025-04-10 13:41:35,289 EPOCH 118
+2025-04-10 13:41:35,327 Epoch 118: Total Training Recognition Loss 0.45  Total Training Translation Loss 0.03 
+2025-04-10 13:41:35,327 EPOCH 119
+2025-04-10 13:41:35,375 Epoch 119: Total Training Recognition Loss 0.46  Total Training Translation Loss 0.09 
+2025-04-10 13:41:35,376 EPOCH 120
+2025-04-10 13:41:35,429 Epoch 120: Total Training Recognition Loss 0.41  Total Training Translation Loss 0.22 
+2025-04-10 13:41:35,430 EPOCH 121
+2025-04-10 13:41:35,469 Epoch 121: Total Training Recognition Loss 0.42  Total Training Translation Loss 0.08 
+2025-04-10 13:41:35,469 EPOCH 122
+2025-04-10 13:41:35,512 Epoch 122: Total Training Recognition Loss 0.40  Total Training Translation Loss 0.05 
+2025-04-10 13:41:35,512 EPOCH 123
+2025-04-10 13:41:35,555 Epoch 123: Total Training Recognition Loss 0.39  Total Training Translation Loss 0.16 
+2025-04-10 13:41:35,556 EPOCH 124
+2025-04-10 13:41:35,607 Epoch 124: Total Training Recognition Loss 0.39  Total Training Translation Loss 0.25 
+2025-04-10 13:41:35,607 EPOCH 125
+2025-04-10 13:41:35,645 Epoch 125: Total Training Recognition Loss 0.38  Total Training Translation Loss 0.05 
+2025-04-10 13:41:35,645 EPOCH 126
+2025-04-10 13:41:35,698 Epoch 126: Total Training Recognition Loss 0.34  Total Training Translation Loss 0.05 
+2025-04-10 13:41:35,698 EPOCH 127
+2025-04-10 13:41:35,736 Epoch 127: Total Training Recognition Loss 0.28  Total Training Translation Loss 0.04 
+2025-04-10 13:41:35,736 EPOCH 128
+2025-04-10 13:41:35,775 Epoch 128: Total Training Recognition Loss 0.30  Total Training Translation Loss 0.10 
+2025-04-10 13:41:35,775 EPOCH 129
+2025-04-10 13:41:35,812 Epoch 129: Total Training Recognition Loss 0.29  Total Training Translation Loss 0.11 
+2025-04-10 13:41:35,813 EPOCH 130
+2025-04-10 13:41:35,850 Epoch 130: Total Training Recognition Loss 0.29  Total Training Translation Loss 0.13 
+2025-04-10 13:41:35,850 EPOCH 131
+2025-04-10 13:41:35,889 Epoch 131: Total Training Recognition Loss 0.30  Total Training Translation Loss 0.23 
+2025-04-10 13:41:35,890 EPOCH 132
+2025-04-10 13:41:35,928 Epoch 132: Total Training Recognition Loss 0.29  Total Training Translation Loss 0.06 
+2025-04-10 13:41:35,929 EPOCH 133
+2025-04-10 13:41:35,982 Epoch 133: Total Training Recognition Loss 0.25  Total Training Translation Loss 0.17 
+2025-04-10 13:41:35,983 EPOCH 134
+2025-04-10 13:41:36,049 Epoch 134: Total Training Recognition Loss 0.27  Total Training Translation Loss 0.10 
+2025-04-10 13:41:36,050 EPOCH 135
+2025-04-10 13:41:36,094 Epoch 135: Total Training Recognition Loss 0.24  Total Training Translation Loss 0.04 
+2025-04-10 13:41:36,094 EPOCH 136
+2025-04-10 13:41:36,135 Epoch 136: Total Training Recognition Loss 0.22  Total Training Translation Loss 0.07 
+2025-04-10 13:41:36,135 EPOCH 137
+2025-04-10 13:41:36,174 Epoch 137: Total Training Recognition Loss 0.20  Total Training Translation Loss 0.49 
+2025-04-10 13:41:36,175 EPOCH 138
+2025-04-10 13:41:36,211 Epoch 138: Total Training Recognition Loss 0.16  Total Training Translation Loss 0.05 
+2025-04-10 13:41:36,211 EPOCH 139
+2025-04-10 13:41:36,286 Epoch 139: Total Training Recognition Loss 0.21  Total Training Translation Loss 0.04 
+2025-04-10 13:41:36,287 EPOCH 140
+2025-04-10 13:41:36,328 Epoch 140: Total Training Recognition Loss 0.18  Total Training Translation Loss 0.17 
+2025-04-10 13:41:36,328 EPOCH 141
+2025-04-10 13:41:36,369 Epoch 141: Total Training Recognition Loss 0.18  Total Training Translation Loss 0.39 
+2025-04-10 13:41:36,369 EPOCH 142
+2025-04-10 13:41:36,407 Epoch 142: Total Training Recognition Loss 0.15  Total Training Translation Loss 0.04 
+2025-04-10 13:41:36,407 EPOCH 143
+2025-04-10 13:41:36,466 Epoch 143: Total Training Recognition Loss 0.16  Total Training Translation Loss 0.02 
+2025-04-10 13:41:36,466 EPOCH 144
+2025-04-10 13:41:36,506 Epoch 144: Total Training Recognition Loss 0.14  Total Training Translation Loss 0.15 
+2025-04-10 13:41:36,509 EPOCH 145
+2025-04-10 13:41:36,549 Epoch 145: Total Training Recognition Loss 0.14  Total Training Translation Loss 0.02 
+2025-04-10 13:41:36,549 EPOCH 146
+2025-04-10 13:41:36,599 Epoch 146: Total Training Recognition Loss 0.17  Total Training Translation Loss 0.24 
+2025-04-10 13:41:36,600 EPOCH 147
+2025-04-10 13:41:36,661 Epoch 147: Total Training Recognition Loss 0.12  Total Training Translation Loss 0.63 
+2025-04-10 13:41:36,661 EPOCH 148
+2025-04-10 13:41:36,702 Epoch 148: Total Training Recognition Loss 0.11  Total Training Translation Loss 0.05 
+2025-04-10 13:41:36,702 EPOCH 149
+2025-04-10 13:41:36,762 Epoch 149: Total Training Recognition Loss 0.11  Total Training Translation Loss 0.42 
+2025-04-10 13:41:36,763 EPOCH 150
+2025-04-10 13:41:36,812 Epoch 150: Total Training Recognition Loss 0.14  Total Training Translation Loss 0.12 
+2025-04-10 13:41:36,812 EPOCH 151
+2025-04-10 13:41:36,870 Epoch 151: Total Training Recognition Loss 0.13  Total Training Translation Loss 0.08 
+2025-04-10 13:41:36,870 EPOCH 152
+2025-04-10 13:41:36,943 Epoch 152: Total Training Recognition Loss 0.11  Total Training Translation Loss 0.03 
+2025-04-10 13:41:36,943 EPOCH 153
+2025-04-10 13:41:36,980 Epoch 153: Total Training Recognition Loss 0.14  Total Training Translation Loss 0.03 
+2025-04-10 13:41:36,981 EPOCH 154
+2025-04-10 13:41:37,017 Epoch 154: Total Training Recognition Loss 0.12  Total Training Translation Loss 0.24 
+2025-04-10 13:41:37,018 EPOCH 155
+2025-04-10 13:41:37,058 Epoch 155: Total Training Recognition Loss 0.15  Total Training Translation Loss 0.10 
+2025-04-10 13:41:37,058 EPOCH 156
+2025-04-10 13:41:37,105 Epoch 156: Total Training Recognition Loss 0.08  Total Training Translation Loss 0.22 
+2025-04-10 13:41:37,105 EPOCH 157
+2025-04-10 13:41:37,148 Epoch 157: Total Training Recognition Loss 0.09  Total Training Translation Loss 0.08 
+2025-04-10 13:41:37,148 EPOCH 158
+2025-04-10 13:41:37,210 Epoch 158: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.04 
+2025-04-10 13:41:37,210 EPOCH 159
+2025-04-10 13:41:37,255 Epoch 159: Total Training Recognition Loss 0.10  Total Training Translation Loss 0.27 
+2025-04-10 13:41:37,256 EPOCH 160
+2025-04-10 13:41:37,303 Epoch 160: Total Training Recognition Loss 0.08  Total Training Translation Loss 0.04 
+2025-04-10 13:41:37,304 EPOCH 161
+2025-04-10 13:41:37,343 Epoch 161: Total Training Recognition Loss 0.10  Total Training Translation Loss 0.22 
+2025-04-10 13:41:37,343 EPOCH 162
+2025-04-10 13:41:37,381 Epoch 162: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.04 
+2025-04-10 13:41:37,382 EPOCH 163
+2025-04-10 13:41:37,422 Epoch 163: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.19 
+2025-04-10 13:41:37,422 EPOCH 164
+2025-04-10 13:41:37,472 Epoch 164: Total Training Recognition Loss 0.08  Total Training Translation Loss 0.11 
+2025-04-10 13:41:37,473 EPOCH 165
+2025-04-10 13:41:37,519 Epoch 165: Total Training Recognition Loss 0.09  Total Training Translation Loss 0.04 
+2025-04-10 13:41:37,520 EPOCH 166
+2025-04-10 13:41:37,559 Epoch 166: Total Training Recognition Loss 0.09  Total Training Translation Loss 0.13 
+2025-04-10 13:41:37,559 EPOCH 167
+2025-04-10 13:41:37,597 Epoch 167: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.27 
+2025-04-10 13:41:37,598 EPOCH 168
+2025-04-10 13:41:37,634 Epoch 168: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.03 
+2025-04-10 13:41:37,635 EPOCH 169
+2025-04-10 13:41:37,693 Epoch 169: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.07 
+2025-04-10 13:41:37,694 EPOCH 170
+2025-04-10 13:41:37,779 Epoch 170: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.15 
+2025-04-10 13:41:37,780 EPOCH 171
+2025-04-10 13:41:37,826 Epoch 171: Total Training Recognition Loss 0.06  Total Training Translation Loss 0.04 
+2025-04-10 13:41:37,826 EPOCH 172
+2025-04-10 13:41:37,874 Epoch 172: Total Training Recognition Loss 0.07  Total Training Translation Loss 0.07 
+2025-04-10 13:41:37,874 EPOCH 173
+2025-04-10 13:41:37,926 Epoch 173: Total Training Recognition Loss 0.06  Total Training Translation Loss 0.38 
+2025-04-10 13:41:37,927 EPOCH 174
+2025-04-10 13:41:37,974 Epoch 174: Total Training Recognition Loss 0.05  Total Training Translation Loss 0.06 
+2025-04-10 13:41:37,975 EPOCH 175
+2025-04-10 13:41:38,018 Epoch 175: Total Training Recognition Loss 0.10  Total Training Translation Loss 0.04 
+2025-04-10 13:41:38,019 EPOCH 176
+2025-04-10 13:41:38,088 Epoch 176: Total Training Recognition Loss 0.04  Total Training Translation Loss 0.08 
+2025-04-10 13:41:38,088 EPOCH 177
+2025-04-10 13:41:38,127 Epoch 177: Total Training Recognition Loss 0.04  Total Training Translation Loss 0.74 
+2025-04-10 13:41:38,127 EPOCH 178
+2025-04-10 13:41:38,168 Epoch 178: Total Training Recognition Loss 0.05  Total Training Translation Loss 0.11 
+2025-04-10 13:41:38,168 EPOCH 179
+2025-04-10 13:41:38,219 Epoch 179: Total Training Recognition Loss 0.04  Total Training Translation Loss 0.05 
+2025-04-10 13:41:38,219 EPOCH 180
+2025-04-10 13:41:38,258 Epoch 180: Total Training Recognition Loss 0.05  Total Training Translation Loss 0.08 
+2025-04-10 13:41:38,259 EPOCH 181
+2025-04-10 13:41:38,300 Epoch 181: Total Training Recognition Loss 0.04  Total Training Translation Loss 0.03 
+2025-04-10 13:41:38,300 EPOCH 182
+2025-04-10 13:41:38,339 Epoch 182: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.48 
+2025-04-10 13:41:38,339 EPOCH 183
+2025-04-10 13:41:38,379 Epoch 183: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.31 
+2025-04-10 13:41:38,379 EPOCH 184
+2025-04-10 13:41:38,430 Epoch 184: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.07 
+2025-04-10 13:41:38,431 EPOCH 185
+2025-04-10 13:41:38,485 Epoch 185: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.19 
+2025-04-10 13:41:38,486 EPOCH 186
+2025-04-10 13:41:38,532 Epoch 186: Total Training Recognition Loss 0.05  Total Training Translation Loss 0.02 
+2025-04-10 13:41:38,532 EPOCH 187
+2025-04-10 13:41:38,576 Epoch 187: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.03 
+2025-04-10 13:41:38,576 EPOCH 188
+2025-04-10 13:41:38,624 Epoch 188: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.02 
+2025-04-10 13:41:38,624 EPOCH 189
+2025-04-10 13:41:38,685 Epoch 189: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.44 
+2025-04-10 13:41:38,685 EPOCH 190
+2025-04-10 13:41:38,743 Epoch 190: Total Training Recognition Loss 0.04  Total Training Translation Loss 0.08 
+2025-04-10 13:41:38,743 EPOCH 191
+2025-04-10 13:41:38,827 Epoch 191: Total Training Recognition Loss 0.03  Total Training Translation Loss 0.04 
+2025-04-10 13:41:38,828 EPOCH 192

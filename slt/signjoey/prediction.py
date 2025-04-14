@@ -11,7 +11,10 @@ import time
 import torch.nn as nn
 
 from typing import List
-from torchtext.legacy.data import Dataset
+try:
+    from torchtext.legacy.data import Dataset
+except ModuleNotFoundError:
+    from torchtext.data import Dataset
 from signjoey.loss import XentLoss
 from signjoey.helpers import (
     bpe_postprocess,

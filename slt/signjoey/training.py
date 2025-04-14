@@ -32,7 +32,10 @@ from signjoey.metrics import wer_single
 from signjoey.vocabulary import SIL_TOKEN
 from torch import Tensor
 from torch.utils.tensorboard import SummaryWriter
-from torchtext.legacy.data import Dataset
+try:
+    from torchtext.legacy.data import Dataset
+except ModuleNotFoundError:
+    from torchtext.data import Dataset
 from typing import List, Dict
 
 # Training pipline:

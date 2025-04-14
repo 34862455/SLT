@@ -17,7 +17,10 @@ import numpy as np
 
 import torch
 from torch import nn, Tensor
-from torchtext.legacy.data import Dataset
+try:
+    from torchtext.legacy.data import Dataset
+except ModuleNotFoundError:
+    from torchtext.data import Dataset
 import yaml
 from signjoey.vocabulary import GlossVocabulary, TextVocabulary
 
