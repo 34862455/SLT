@@ -9,6 +9,7 @@ import os
 import shutil
 import time
 import queue
+import wandb
 
 from signjoey.model import build_model
 from signjoey.batch import Batch
@@ -47,6 +48,18 @@ from typing import List, Dict
     # Final evaluation on val data
 
 
+def deep_update(cfg, updates):
+	for k, v in updates.items():
+		if "." not in k:
+			# Skip whole-dictionary keys like "training" or "model"
+			continue
+		print(f"Applying override: {k} = {v}") # <--- DEBUG
+		keys = k.split(".")
+		d = cfg
+		for key in keys[:-1]:
+			d = d.setdefault(key, {})
+		d[keys[-1]] = v
+	return cfg
 # pylint: disable=too-many-instance-attributes
 # Manages the training cycle.
 class TrainManager:
@@ -564,6 +577,17 @@ class TrainManager:
                             val_res["valid_scores"]["bleu_scores"],
                             self.steps,
                         )
+                        
+                #     if wandb.run:
+                #     	wandb.log({
+                #     		"val_bleu": val_res["valid_scores"]["bleu"] if "valid_scores.bleu" in val_res else -1,
+        		# 	"val_chrf": val_res["valid_scores"]["chrf"] if "valid_scores.chrf" in val_res else -1,
+        		# 	"val_rouge": val_res["valid_scores"]["rouge"] if "valid_scores.rouge" in val_res else -1,
+        		# 	"val_translation_loss": val_res["valid_translation_loss"] if "valid_translation_loss" in val_res else -1,
+        		# 	"val_recognition_loss": val_res["valid_recognition_loss"] if "valid_recognition_loss" in val_res else -1,
+        		# 	"val_ppl": val_res["valid_ppl"] if "valid_ppl" in val_res else -1,
+        		# 	"step": self.steps
+        		# })
 
                     if self.early_stopping_metric == "recognition_loss":
                         assert self.do_recognition
@@ -746,6 +770,10 @@ class TrainManager:
             self.best_ckpt_score,
             self.early_stopping_metric,
         )
+        
+        if wandb.run:
+        	wandb.summary["best_val_score"] = self.best_ckpt_score
+        	wandb.summary["best_step"] = self.best_ckpt_iteration
 
         self.tb_writer.close()  # close Tensorboard writer
 
@@ -995,6 +1023,40 @@ def train(cfg_file: str) -> None:
     """
     # Step 1: Load configurations from a YAML file
     cfg = load_config(cfg_file)
+    
+    #---------------------------------------------------------------------------
+    # # initialize wandb and allow sweep overrides
+    # if wandb.run is None:
+    # 	wandb.init(project="camgoz_slt", config=cfg)
+    #
+    # else:
+    # 	wandb.config.update(cfg, allow_val_change=True)
+    #
+    # # Use wandb.config as the active config
+    # sweep_cfg = dict(wandb.config)
+    # print("Sweep config keys being applied:", list(sweep_cfg.keys()))  # <--- DEBUG
+    #
+    # cfg = deep_update(cfg, sweep_cfg)
+    #
+    # # Ensure embedding dim always matches hidden size (required by transformer)
+    # # cfg["model"]["decoder"]["embeddings"]["embedding_dim"] = cfg["model"]["encoder"]["embeddings"]["embedding_dim"]
+    # cfg["model"]["encoder"]["embeddings"]["embedding_dim"] = cfg["model"]["encoder"]["hidden_size"]
+    # cfg["model"]["decoder"]["hidden_size"] = cfg["model"]["encoder"]["hidden_size"]
+    # cfg["model"]["decoder"]["embeddings"]["embedding_dim"] = cfg["model"]["encoder"]["hidden_size"]
+    #
+    # cfg["model"]["decoder"]["num_layers"] = cfg["model"]["encoder"]["num_layers"]
+    #
+    # cfg["model"]["decoder"]["embeddings"]["dropout"] = cfg["model"]["encoder"]["embeddings"]["dropout"]
+    # cfg["model"]["encoder"]["dropout"] = cfg["model"]["encoder"]["embeddings"]["dropout"]
+    # cfg["model"]["decoder"]["dropout"] = cfg["model"]["encoder"]["embeddings"]["dropout"]
+    #
+    #
+    # # Define run name AFTER config override
+    # # Now these access patterns are safe again
+    # run_name = f"bs{cfg['training']['batch_size']}_hs{cfg['model']['encoder']['hidden_size']}_drop{cfg['model']['encoder']['embeddings']['dropout']:.2f}_nl{cfg['model']['decoder']['num_layers']}"
+    # wandb.run.name = run_name
+    # wandb.run.save()
+    #---------------------------------------------------------------------------
 
     # Step 2: Load training, validation, and test data
 
