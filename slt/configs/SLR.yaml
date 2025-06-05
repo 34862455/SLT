@@ -5,9 +5,9 @@ data:
     sgn: sign
     txt: text
     gls: gloss
-    train: DSG_open07_train.pt
-    dev: DSG_open07_dev.pt
-    test: DSG_open07_test.pt
+    train: DSG_train.pt
+    dev: DSG_dev.pt
+    test: DSG_test.pt
     feature_size: 1024
     level: word
     txt_lowercase: true
